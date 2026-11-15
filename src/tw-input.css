@@ -1,0 +1,17 @@
+/* PTC Creatives — Tailwind v4 entry (preflight intentionally skipped: retrofit on existing CSS) */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@source "./site/*.html";
+
+@theme {
+  --color-ink: #101f1f;
+  --color-night: #0a1414;
+  --color-paper: #f4e9d2;
+  --color-dayink: #241e16;
+  --color-teal: #179c97;
+  --color-turmeric: #e8a317;
+  --color-verm: #da4121;
+  --font-pop: "Poppins", sans-serif;
+}

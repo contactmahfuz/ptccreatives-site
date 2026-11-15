@@ -1,0 +1,153 @@
+<!-- ============================================================
+  PTC CREATIVES — Patachitra Scroll Hero
+  HOW TO USE IN WORDPRESS:
+  1. Create a FULL-WIDTH section (no padding) in Elementor.
+  2. Drop in an HTML widget and paste this ENTIRE block.
+  All images are embedded in the code — nothing to upload.
+  • Swap in your real logo: search for "LOGO HERE" below.
+  • Edit the headline / sub-line / button text just under it.
+============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap" rel="stylesheet">
+<style>
+#ptc-hero{position:relative;width:100%;background:#101f1f;overflow:hidden;font-family:'Poppins',sans-serif;}
+#ptc-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(244,233,210,.06) 1px,transparent 1.5px);background-size:26px 26px;pointer-events:none;}
+#ptc-hero .ptc-stage-wrap{position:relative;width:100%;}
+#ptc-hero .ptc-stage{position:absolute;top:0;left:0;width:1376px;height:768px;transform-origin:0 0;}
+#ptc-hero .ptc-arch{position:absolute;bottom:78px;border-radius:999px 999px 0 0;z-index:1;}
+#ptc-hero .ptc-arch-teal{left:598px;width:264px;height:594px;background:#179c97;}
+#ptc-hero .ptc-arch-char{left:800px;width:262px;height:630px;background:#3c4041;}
+#ptc-hero .ptc-arch-verm{left:1046px;width:284px;height:594px;background:#da4121;}
+#ptc-hero .ptc-stage img{position:absolute;display:block;height:auto;}
+#ptc-hero .ptc-sun{left:650px;top:90px;width:420px;z-index:2;}
+#ptc-hero .ptc-figure{left:920px;top:155px;width:380px;z-index:3;}
+#ptc-hero .ptc-ribbon{left:420px;top:290px;width:880px;z-index:4;}
+#ptc-hero .ptc-motif{z-index:5;}
+#ptc-hero .ptc-lotus{left:442px;top:420px;width:112px;}
+#ptc-hero .ptc-fish1{left:760px;top:575px;width:140px;}
+#ptc-hero .ptc-fish2{left:1005px;top:620px;width:118px;}
+#ptc-hero .ptc-peacock{left:1130px;top:470px;width:225px;}
+#ptc-hero .ptc-border{position:absolute;left:-300px;right:-300px;bottom:0;height:80px;z-index:6;
+  background:url(@@BORDER@@) repeat-x;background-size:auto 80px;}
+#ptc-hero .ptc-head{z-index:7;}
+#ptc-hero .ptc-head-desktop{position:absolute;left:84px;top:192px;width:500px;}
+#ptc-hero .ptc-head-mobile{display:none;padding:52px 26px 6px;}
+#ptc-hero .ptc-logo{display:block;width:190px;height:auto;margin:0 0 24px;}
+#ptc-hero .ptc-title{margin:0 0 20px;font-weight:600;font-size:52px;line-height:1.12;color:#ffffff;}
+#ptc-hero .ptc-title em{font-style:normal;color:#179c97;}
+#ptc-hero .ptc-sub{margin:0 0 30px;max-width:370px;font-weight:300;font-size:18px;line-height:1.65;color:rgba(255,255,255,.8);}
+#ptc-hero .ptc-cta{display:inline-block;padding:14px 30px;border:1px solid #179c97;color:#ffffff;
+  font-size:13px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;
+  transition:background .3s,color .3s;}
+#ptc-hero .ptc-cta:hover{background:#179c97;color:#101f1f;}
+#ptc-hero .ptc-cue{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);z-index:8;
+  font-size:11px;font-weight:300;letter-spacing:.45em;text-transform:uppercase;color:rgba(255,255,255,.55);
+  animation:ptcCue 2.2s ease-in-out infinite;}
+@keyframes ptcCue{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+@media (max-width:699px){
+  #ptc-hero .ptc-head-desktop{display:none;}
+  #ptc-hero .ptc-head-mobile{display:block;}
+  #ptc-hero .ptc-head-mobile .ptc-title{font-size:34px;}
+  #ptc-hero .ptc-head-mobile .ptc-logo{width:150px;}
+  #ptc-hero .ptc-head-mobile .ptc-sub{font-size:15px;margin-bottom:22px;}
+  #ptc-hero .ptc-cue{display:none;}
+}
+@media (prefers-reduced-motion:reduce){#ptc-hero .ptc-cue{animation:none;}}
+</style>
+
+<section id="ptc-hero">
+  <!-- Mobile headline (shown under 700px) -->
+  <div class="ptc-head ptc-head-mobile">
+    <img class="ptc-logo" src="@@LOGO@@" alt="PTC Creatives">
+    <h1 class="ptc-title">Create Content<br>That <em>Matters.</em></h1>
+    <p class="ptc-sub">Inspiring Creative Brilliance for businesses all around the world.</p>
+    <a class="ptc-cta" href="#work">Get Started</a>  <!-- point this at your Contact page -->
+  </div>
+
+  <div class="ptc-stage-wrap">
+    <div class="ptc-stage">
+      <div class="ptc-arch ptc-arch-teal"></div>
+      <div class="ptc-arch ptc-arch-char"></div>
+      <div class="ptc-arch ptc-arch-verm"></div>
+      <img class="ptc-sun" src="@@SUN@@" alt="">
+      <img class="ptc-figure" src="@@FIGURE@@" alt="Patachitra artist filming with a cinema camera">
+      <img class="ptc-ribbon" src="@@RIBBON@@" alt="">
+      <img class="ptc-motif ptc-lotus" src="@@LOTUS@@" alt="">
+      <img class="ptc-motif ptc-fish1" src="@@FISH1@@" alt="">
+      <img class="ptc-motif ptc-fish2" src="@@FISH2@@" alt="">
+      <img class="ptc-motif ptc-peacock" src="@@PEACOCK@@" alt="">
+
+      <!-- Desktop headline. LOGO HERE: your logo is embedded (auto-generated
+           light version for the dark background). To swap it for your own file,
+           replace the src of the img below with your logo URL. -->
+      <div class="ptc-head ptc-head-desktop">
+        <img class="ptc-logo" src="@@LOGO@@" alt="PTC Creatives">
+        <h1 class="ptc-title">Create Content<br>That <em>Matters.</em></h1>
+        <p class="ptc-sub">Inspiring Creative Brilliance for businesses all around the world.</p>
+        <a class="ptc-cta" href="#work">Get Started</a>  <!-- point this at your Contact page -->
+      </div>
+
+      <div class="ptc-border"></div>
+    </div>
+  </div>
+  <div class="ptc-cue">scroll</div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var hero=document.getElementById('ptc-hero');
+  var stage=hero.querySelector('.ptc-stage');
+  var wrap=hero.querySelector('.ptc-stage-wrap');
+
+  function fit(){
+    var w=hero.clientWidth,s,tx;
+    if(w<700){ s=w/950; tx=-430*s; }      /* mobile: zoom into the artwork cluster */
+    else     { s=w/1376; tx=0; }          /* desktop: full 16:9 canvas */
+    stage.style.transform='translateX('+tx+'px) scale('+s+')';
+    wrap.style.height=(768*s)+'px';
+  }
+  window.addEventListener('resize',fit); fit();
+
+  if(!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---- entrance: the scene assembles on load ---- */
+  gsap.timeline({defaults:{ease:'power3.out'}})
+    .from('#ptc-hero .ptc-arch',{y:140,autoAlpha:0,duration:.9,stagger:.14})
+    .from('#ptc-hero .ptc-sun',{scale:.5,rotation:-45,autoAlpha:0,duration:1.1,ease:'back.out(1.4)'},'-=.55')
+    .from('#ptc-hero .ptc-figure',{y:60,autoAlpha:0,duration:.9},'-=.65')
+    .fromTo('#ptc-hero .ptc-ribbon',
+      {clipPath:'inset(-5% 0% -5% 100%)'},
+      {clipPath:'inset(-5% 0% -5% 0%)',duration:1.3,ease:'power2.inOut'},'-=.45')
+    .from('#ptc-hero .ptc-motif',{scale:0,autoAlpha:0,duration:.55,ease:'back.out(2.2)',stagger:.13},'-=.5')
+    .from('#ptc-hero .ptc-head-desktop > *, #ptc-hero .ptc-head-mobile > *',
+      {y:28,autoAlpha:0,duration:.7,stagger:.09},'-=1.1');
+
+  /* ---- scroll choreography ---- */
+  function choreo(st,k){
+    st.to('#ptc-hero .ptc-arch-teal',{y:-70*k},0)
+      .to('#ptc-hero .ptc-arch-char',{y:-115*k},0)
+      .to('#ptc-hero .ptc-arch-verm',{y:-45*k},0)
+      .to('#ptc-hero .ptc-sun',{rotation:75,scale:1.07},0)
+      .to('#ptc-hero .ptc-ribbon',{x:-55*k},0)
+      .to('#ptc-hero .ptc-figure',{y:-30*k},0)
+      .to('#ptc-hero .ptc-lotus',{y:-45*k,rotation:-6},0)
+      .to('#ptc-hero .ptc-fish1',{x:-75*k},0)
+      .to('#ptc-hero .ptc-fish2',{x:-50*k},0)
+      .to('#ptc-hero .ptc-peacock',{y:-28*k},0)
+      .to('#ptc-hero .ptc-border',{backgroundPositionX:'-=280px'},0)
+      .to('#ptc-hero .ptc-cue',{autoAlpha:0,duration:.1},0);
+  }
+  var mm=gsap.matchMedia();
+  mm.add('(min-width:700px)',function(){
+    /* hero pins in place while the scene plays, then releases */
+    choreo(gsap.timeline({scrollTrigger:{trigger:'#ptc-hero',start:'top top',end:'+=120%',scrub:1,pin:true,anticipatePin:1}}),1);
+  });
+  mm.add('(max-width:699px)',function(){
+    /* lighter, unpinned parallax on phones */
+    choreo(gsap.timeline({scrollTrigger:{trigger:'#ptc-hero',start:'top 85%',end:'bottom top',scrub:1}}),.6);
+  });
+})();
+</script>
