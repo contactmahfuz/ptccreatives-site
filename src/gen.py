@@ -400,7 +400,7 @@ EXTRA_JS = """
 
 # ---------- shared partials ----------
 PAGES = {
-    "index.html":        ("Home",         "PTC Creatives — Create Content That Matters", "Creative production house in Dhaka: video production, documentaries, podcasts, design and digital campaigns for businesses worldwide."),
+    "index.html":        ("Home",         "PTC Creatives — Stories Told With Passion", "Creative production house in Dhaka: video production, documentaries, podcasts, design and digital campaigns for businesses worldwide."),
     "about.html":        ("About",        "About — PTC Creatives", "The studio behind the stories: who we are, how we work, and what we believe about content."),
     "services.html":     ("Services",     "Services — PTC Creatives", "Video production, content audit, content strategy, design & printing, social media management and web presence."),
     "case-studies.html": ("Case Studies", "Case Studies — PTC Creatives", "Selected work: documentaries, campaigns, podcasts and corporate films by PTC Creatives."),
