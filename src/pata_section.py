@@ -124,17 +124,17 @@ setTimeout(function(){l.parentNode&&l.parentNode.removeChild(l)},550)}},2400);})
 LENIS_TAG = '<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>\n'
 
 PATA_CSS = """
-/* ============ film grain (heavy) + vignette ============ */
-.grain{position:fixed;inset:-100%;z-index:200;pointer-events:none;opacity:.16;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size:300px 300px;animation:grainShift .8s steps(8) infinite;}
-@keyframes grainShift{0%{transform:translate(0,0)}12.5%{transform:translate(-4%,3%)}25%{transform:translate(3%,-5%)}37.5%{transform:translate(-5%,-2%)}50%{transform:translate(5%,4%)}62.5%{transform:translate(-2%,6%)}75%{transform:translate(6%,-3%)}87.5%{transform:translate(-6%,-6%)}100%{transform:translate(0,0)}}
+/* ============ film grain (lives on the backgrounds, under all content) + vignette ============ */
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;}
+#ptc-hero,#ptc-main{background-color:transparent;}
+.gr-host{isolation:isolate;}
+.gr-pos{position:relative;}
+.gr{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;}
+.ps-sky>.gr,.cs-sky>.gr{z-index:0;}
+html.js-h .ps-panel>.gr,html.js-h #cs .cs-panel>.gr{display:none;}
+.grain,.gr{mix-blend-mode:soft-light;opacity:var(--grain-o,.38);}
+.gr-i{position:absolute;right:0;bottom:0;background-repeat:repeat;will-change:transform;}
 .vig{position:fixed;inset:0;z-index:199;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 58%,rgba(5,10,10,.42) 100%);}
-@media (max-width:900px){.grain{opacity:.11;}}
-@media (prefers-reduced-motion:reduce){.grain{animation:none;}}
-.grain.live{inset:0;animation:none;background:none;mix-blend-mode:normal;opacity:.14;}
-.grain.live canvas{display:block;width:100%;height:100%;}
-@media (max-width:900px){.grain.live{opacity:.16;}}
 
 
 /* ============ iris preloader ============ */
@@ -216,51 +216,51 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 """
 
 PATA_JS = """
-/* ===== live film grain: fresh noise every frame, whole site ===== */
+/* ===== film grain: animated noise that lives on the backgrounds, under all content ===== */
 (function(){
-  var el = document.querySelector('.grain');
-  if(!el) return;
+  var root = document.querySelector('.grain');
+  if(!root) return;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var T = 256, POOL = reduce ? 1 : 10, FPS = 24;
-  var tiles = [];
-  for(var n=0; n<POOL; n++){
-    var t = document.createElement('canvas'); t.width = t.height = T;
-    var tc = t.getContext('2d'), im = tc.createImageData(T, T), d = im.data;
-    for(var i=0; i<d.length; i+=4){
-      var v = 128 + (Math.random() + Math.random() - 1) * 170;
-      v = v < 0 ? 0 : v > 255 ? 255 : v;
-      d[i] = d[i+1] = d[i+2] = v; d[i+3] = 255;
-    }
-    tc.putImageData(im, 0, 0);
-    tiles.push(t);
+  var N = 256, cv = document.createElement('canvas'); cv.width = cv.height = N;
+  var cx = cv.getContext('2d'); if(!cx) return;
+  var im = cx.createImageData(N, N), d = im.data;
+  for(var i=0; i<d.length; i+=4){ var v = (Math.random() + Math.random()) * 127.5; d[i] = d[i+1] = d[i+2] = v; d[i+3] = 255; }
+  cx.putImageData(im, 0, 0);
+  var url = 'url(' + cv.toDataURL('image/png') + ')';
+  var layers = [], T = 0;
+  function add(g, on){
+    var inner = document.createElement('div'); inner.className = 'gr-i'; inner.style.backgroundImage = url;
+    g.appendChild(inner); var L = {g:g, i:inner, on:on}; g.__gr = L; layers.push(L);
   }
-  var cv = document.createElement('canvas'), cx = cv.getContext('2d');
-  if(!cx) return;
-  el.appendChild(cv); el.classList.add('live');
-  var pats = tiles.map(function(t){ return cx.createPattern(t, 'repeat'); });
-  var W = 0, H = 0;
+  add(root, true);   // page base: shows wherever a section has no background of its own
+  var HOSTS = '#ptc-main .alt,#ptc-main .pg-day,#ptc-main .pg-amber,#ptc-main .pg-dusk,#ptc-main .pg-eve,#ptc-main .pg-night,'
+            + '#ptc-main [class*="pg-grad"],.ps-panel,.ps-sky,#cs .cs-panel,#cs .cs-sky,.ptc-footer';
+  [].forEach.call(document.querySelectorAll(HOSTS), function(h){
+    var g = document.createElement('div'); g.className = 'gr'; g.setAttribute('aria-hidden', 'true');
+    h.classList.add('gr-host');
+    if(getComputedStyle(h).position === 'static') h.classList.add('gr-pos');
+    var grad = h.querySelector(':scope > .ps-grad, :scope > .cs-grad');   // skies: grain sits on the gradient, under the sun/moon
+    if(grad) h.insertBefore(g, grad.nextSibling); else h.appendChild(g);
+    add(g, false);
+  });
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ e.target.__gr.on = e.isIntersecting; }); });
+    layers.forEach(function(L){ if(L.g !== root) io.observe(L.g); });
+  } else layers.forEach(function(L){ L.on = true; });
+  function frame(all){
+    for(var k=0; k<layers.length; k++){ var L = layers[k];
+      if(all || L.on) L.i.style.transform = 'translate3d(' + ((Math.random() * T) | 0) + 'px,' + ((Math.random() * T) | 0) + 'px,0)'; }
+  }
   function size(){
-    var s = window.innerWidth < 900 ? 2 : 1.4;           // grain size in CSS px
-    W = Math.ceil(window.innerWidth / s); H = Math.ceil(window.innerHeight / s);
-    cv.width = W; cv.height = H;
-    draw();
-  }
-  function draw(){
-    var p = pats[(Math.random() * pats.length) | 0];
-    cx.setTransform(1, 0, 0, 1, -((Math.random() * T) | 0), -((Math.random() * T) | 0));
-    cx.fillStyle = p;
-    cx.fillRect(0, 0, W + T, H + T);
+    T = Math.round(N * (window.innerWidth < 900 ? 1.15 : 1.2));   // grain size in CSS px
+    layers.forEach(function(L){ var s = L.i.style; s.backgroundSize = T + 'px ' + T + 'px'; s.top = s.left = -T + 'px'; });
+    frame(true);
   }
   var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(size, 150); });
   size();
   if(reduce) return;
-  var last = 0, step = 1000 / FPS, run = true;
-  function tick(now){
-    if(run && now - last >= step){ last = now; draw(); }
-    requestAnimationFrame(tick);
-  }
-  document.addEventListener('visibilitychange', function(){ run = !document.hidden; });
-  requestAnimationFrame(tick);
+  var last = 0, step = 1000 / 24;
+  (function tick(now){ if(now - last >= step){ last = now; frame(false); } requestAnimationFrame(tick); })(0);
 })();
 
 /* ===== lenis smooth scrolling ===== */
