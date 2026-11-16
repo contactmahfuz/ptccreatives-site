@@ -4,7 +4,7 @@ import re
 
 IX_ROWS = [
     ("01", "Video Production",  "Films, documentaries, podcasts & music videos, crafted in-house.", "img/sun.webp"),
-    ("02", "Event Management",  "Concept to coverage, on the ground and on camera.",                 "img/peacock.webp"),
+    ("02", "Event Management and Coverage", "Concept to coverage, on the ground and on camera.",     "img/peacock.webp"),
     ("03", "Content Strategy",  "A roadmap for what to say, where, and how often.",                  "img/fish1.webp"),
     ("04", "Graphic Design &amp; Printing", "Identities and visuals, on screen and on paper.",       "img/lotus.webp"),
     ("05", "Social Media Management", "Calendars, captions and growth that compounds.",              "img/fish2.webp"),

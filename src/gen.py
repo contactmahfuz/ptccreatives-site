@@ -637,7 +637,7 @@ SERVICES = [
     ("Video Production",
      "Brand stories that capture your company's voice and engage the audience they're made for, built to generate leads, not just views.",
      ["Corporate AV &amp; company profiles","Documentaries","Podcast production","Music videos","TVC &amp; OVC","Event aftermovies"]),
-    ("Event Management",
+    ("Event Management and Coverage",
      "Concept to coverage. We plan, run and capture events end to end, handling the production on the ground and on camera.",
      ["Event concept &amp; planning","On-ground management","Multi-camera coverage","Photo &amp; video wrap-up"]),
     ("Content Strategy",
