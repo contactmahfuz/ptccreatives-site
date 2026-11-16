@@ -42,6 +42,8 @@ else:
 
 # ---------- team photos: center-crop to 2:3, uniform size ----------
 os.makedirs(f"{OUT}/img/team", exist_ok=True)
+os.makedirs(f"{OUT}/img/work", exist_ok=True)
+for _w in os.listdir("workimg"): shutil.copy("workimg/"+_w, f"{OUT}/img/work/"+_w)
 # named per person (from the project uploads) — mapping is verified, website order
 _team_src = [("mahfuz.jpg","team1"),("sabitul.jpg","team2"),("yousuf.jpg","team3"),
              ("tanjir.jpg","team4"),("josub.png","team5"),("toufiq.png","team6")]
@@ -675,35 +677,34 @@ BODY_SERVICES = f"""<div id="ptc-main">
 """
 
 CASES = [
-    ("Event Management","Future of Capitalism","IBACC",
+    ("foc","Event Management","Future of Capitalism","IBACC",
      "A startup competition where every logistic ran through our team, from the stage and set design to execution on the day."),
-    ("Documentary","Chronicles of Freedom","The Bangladesh Dialogue",
+    ("chronicles","Documentary","Chronicles of Freedom","The Bangladesh Dialogue",
      "A documentary preserving the history of the July Revolution, carried end to end in-house, from the shoots to the screening."),
-    ("Event Management","Future Bangladesh Challenge","The Bangladesh Dialogue",
+    ("fbc","Event Management","Future Bangladesh Challenge","The Bangladesh Dialogue",
      "A national case competition finale built to surface policy from the root level, with the stage set and run by us from planning to the closing minute."),
-    ("Corporate Film","PHC Pile Process Films","Samuda Construction Ltd",
+    ("samuda","Corporate Film","PHC Pile Process Films","Samuda Construction Ltd",
      "Narrated films that turn heavy manufacturing into a clear, confident story for clients and partners."),
-    ("Podcast","On Record with Saif Rubab","On Record",
+    ("onrecord","Podcast","On Record with Saif Rubab","On Record",
      "A long-form interview series produced and branded with us, from studio setup through to post."),
-    ("Institutional Film","Feni Girls' Cadet College","FGCC",
+    ("fgcc","Institutional Film","Feni Girls' Cadet College","FGCC",
      "An institutional film capturing the character of one of the country's cadet colleges."),
-    ("Design","Brand Merchandising","WeGro, United Securities, Momentum",
+    ("merch","Design","Brand Merchandising","WeGro, United Securities, Momentum",
      "Identity applied across merchandise, print and collateral: totes, notebooks, profiles and packaging."),
-    ("Event Coverage","Almost Friday","Chords",
+    ("almostfriday","Event Coverage","Almost Friday","Chords",
      "Live music coverage, photography and video, capturing the room as it happened."),
 ]
-# EDIT: add a URL as a 5th item in CASES to make a card clickable; until then it
-# renders as a non-link so it cannot dead-jump to the top of the page.
-_MOTIF = ["m-lotus","m-fish1","m-fish2"]
+# EDIT: add a URL as a 6th item in CASES to make a card clickable.
 cards = ""
 for _i, _c in enumerate(CASES):
-    tag, title, client, desc = _c[:4]
-    url = _c[4] if len(_c) > 4 else None
+    img, tag, title, client, desc = _c[:5]
+    url = _c[5] if len(_c) > 5 else None
     _o = f'<a class="card ptc-reveal" href="{url}" target="_blank" rel="noopener">' if url else '<div class="card ptc-reveal">'
     _end = "</a>" if url else "</div>"
     _go = '<span class="card-go">Watch &rarr;</span>' if url else ""
     cards += f"""      {_o}
-        <div class="card-top"><span class="tag">{tag}</span><span class="card-n">{_i+1:02d}</span><span class="m {_MOTIF[_i%3]}"></span></div>
+        <div class="card-top"><img src="img/work/{img}.webp" alt="{title}" loading="lazy">
+          <span class="tag">{tag}</span><span class="card-n">{_i+1:02d}</span></div>
         <div class="card-body"><h3>{title}</h3><p class="client">{client}</p><p>{desc}</p>{_go}</div>
       {_end}\n"""
 
