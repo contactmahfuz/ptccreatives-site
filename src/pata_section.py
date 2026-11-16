@@ -310,6 +310,9 @@ PATA_JS = """
     var tl=gsap.timeline({scrollTrigger:{
       trigger:ps, start:'top top', end:function(){ return '+=' + dist(); },
       scrub:1, pin:true, anticipatePin:1, invalidateOnRefresh:true,
+      onUpdate:function(self){
+        if (self.progress > 0.9 && window.ptcTrackOnce) window.ptcTrackOnce('story','StoryComplete',{},true);
+      },
       snap:{snapTo:[0,.25,.5,.75,1], duration:{min:.2,max:.6}, ease:'power1.inOut'}
     }});
     tl.to([track,'.ps-grad'],{x:function(){ return -dist(); }, ease:'none', duration:4},0);

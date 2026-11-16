@@ -81,7 +81,10 @@ var PTC_META_PIXEL_ID = '1589986489809939';
 
   if (el) {
     var yes = el.querySelector('.ck-yes'), no = el.querySelector('.ck-no');
-    if (yes) yes.addEventListener('click', function(){ set('yes'); el.hidden = true; loadAll(); });
+    if (yes) yes.addEventListener('click', function(){
+      set('yes'); el.hidden = true; loadAll();
+      if (window.__ptcFirePageEvents) window.__ptcFirePageEvents();
+    });
     if (no)  no.addEventListener('click',  function(){ set('no');  el.hidden = true; });
   }
   /* footer "Cookie settings" lets a visitor change their mind */
@@ -89,9 +92,78 @@ var PTC_META_PIXEL_ID = '1589986489809939';
     b.addEventListener('click', function(ev){ ev.preventDefault(); if (el) el.hidden = false; });
   });
 
-  /* the form calls this only after a message actually sends, so Lead reflects real enquiries */
-  window.ptcTrackLead = function(){
-    if (get() === 'yes' && window.fbq) window.fbq('track', 'Lead');
-  };
+  /* ===== event layer =====
+     Every call is consent-gated. Tiers, most valuable first:
+       1 Lead     - contact form sent            (optimise campaigns on this)
+       1 Contact  - phone or email clicked       (an enquiry that skips the form)
+       2 ViewContent - services / case studies   (commercial intent -> best retargeting pool)
+       2 ShowreelPlay - pressed play             (custom; engaged with the work)
+       3 StoryComplete / DeepScroll              (custom; read properly, weak but useful)
+       4 PageView - every page                   (baseline audience) */
+  function track(name, params, custom){
+    if (get() !== 'yes' || !window.fbq) return;
+    window.fbq(custom ? 'trackCustom' : 'track', name, params || {});
+  }
+  var fired = {};
+  function trackOnce(key, name, params, custom){
+    if (fired[key]) return;
+    fired[key] = true;
+    track(name, params, custom);
+  }
+  window.ptcTrack = track;
+  window.ptcTrackOnce = trackOnce;
+  window.ptcTrackLead = function(){ track('Lead', {content_name:'Contact form'}); };
+
+  var file = (location.pathname.split('/').pop() || 'index.html');
+  var page = file.replace(/\.html$/,'') || 'home';
+  /* substring match, so clean URLs (/services) keep working too */
+  var INTENT = [
+    ['case-studies', 'Case Studies', 'Work'],
+    ['services',     'Services',     'Services']
+  ];
+  function firePageEvents(){
+    for (var i = 0; i < INTENT.length; i++) {
+      if (file.indexOf(INTENT[i][0]) > -1) {
+        trackOnce('view', 'ViewContent', {content_name:INTENT[i][1], content_category:INTENT[i][2]});
+        return;
+      }
+    }
+  }
+
+  /* tier 1: a tap on the phone number or email is a real enquiry */
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest && e.target.closest('a[href^="tel:"],a[href^="mailto:"]');
+    if (!a) return;
+    track('Contact', {content_name: a.getAttribute('href').indexOf('tel:') === 0 ? 'Phone' : 'Email'});
+  });
+
+  /* tier 2: pressed play on the showreel */
+  var film = document.querySelector('.film-frame');
+  if (film) film.addEventListener('click', function(){
+    track('ShowreelPlay', {content_name:'PTC Creatives Showreel'}, true);
+  }, {once:true});
+
+  /* tier 3: reached the end of the scroll story */
+  var story = document.getElementById('pata');
+  if (story && window.IntersectionObserver) {
+    var last = story.querySelector('.ps-p5');
+    if (last) {
+      var sio = new IntersectionObserver(function(en){
+        en.forEach(function(x){ if (x.isIntersecting) { sio.disconnect(); trackOnce('story','StoryComplete',{},true); } });
+      }, {threshold:.25});
+      sio.observe(last);
+    }
+  }
+
+  /* tier 3: read three quarters of the page, once */
+  var deep = false;
+  window.addEventListener('scroll', function(){
+    if (deep) return;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    if (h > 400 && (window.scrollY / h) >= 0.75) { deep = true; trackOnce('deep','DeepScroll',{content_name:page},true); }
+  }, {passive:true});
+
+  if (get() === 'yes') firePageEvents();
+  window.__ptcFirePageEvents = firePageEvents;
 })();
 """
