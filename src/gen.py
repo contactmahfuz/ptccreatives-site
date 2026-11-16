@@ -550,7 +550,7 @@ def footer(p=""):
   <div class="fgrid">
     <div>
       <img class="flogo" src="{p}img/logo.webp" alt="PTC Creatives">
-      <p>Inspiring Creative Brilliance for businesses all around the world. A creative production house based in Dhaka, Bangladesh.</p>
+      <p>Inspiring Creative Brilliance</p>
     </div>
     <div>
       <h4>Explore</h4>

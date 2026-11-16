@@ -23,8 +23,9 @@
 #ptc-hero .ptc-head-desktop{position:absolute;left:84px;top:192px;width:500px;}
 #ptc-hero .ptc-head-mobile{display:none;padding:118px 26px 10px;}
 #ptc-hero .ptc-logo{display:block;width:190px;height:auto;margin:0 0 24px;}
-#ptc-hero .ptc-title{margin:0 0 32px;font-weight:600;font-size:52px;line-height:1.12;color:#ffffff;}
+#ptc-hero .ptc-title{margin:0 0 20px;font-weight:600;font-size:52px;line-height:1.12;color:#ffffff;}
 #ptc-hero .ptc-title em{font-style:normal;color:#179c97;}
+#ptc-hero .ptc-sub{margin:0 0 30px;max-width:370px;font-weight:300;font-size:18px;line-height:1.65;color:rgba(255,255,255,.8);}
 #ptc-hero .ptc-cta{display:inline-block;padding:14px 30px;border:1px solid #179c97;color:#ffffff;
   font-size:13px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;
   transition:background .3s,color .3s;}
@@ -36,8 +37,9 @@
 @media (max-width:899px){
   #ptc-hero .ptc-head-desktop{display:none;}
   #ptc-hero .ptc-head-mobile{display:block;}
-  #ptc-hero .ptc-head-mobile .ptc-title{font-size:clamp(34px,6.4vw,54px);margin-bottom:28px;}
+  #ptc-hero .ptc-head-mobile .ptc-title{font-size:clamp(34px,6.4vw,54px);}
   #ptc-hero .ptc-head-mobile .ptc-logo{width:clamp(150px,22vw,210px);}
+  #ptc-hero .ptc-head-mobile .ptc-sub{font-size:clamp(15px,2.1vw,19px);margin-bottom:26px;}
   #ptc-hero .ptc-cue{display:none;}
 }
 @media (prefers-reduced-motion:reduce){#ptc-hero .ptc-cue{animation:none;}}
