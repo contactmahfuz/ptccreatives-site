@@ -283,6 +283,10 @@ body{margin:0;background:#101f1f;}
 .vig{position:fixed;inset:0;z-index:199;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 58%,rgba(5,10,10,.42) 100%);}
 @media (max-width:900px){.grain{opacity:.11;}}
 @media (prefers-reduced-motion:reduce){.grain{animation:none;}}
+.grain.live{inset:0;animation:none;background:none;mix-blend-mode:normal;opacity:.12;}
+.grain.live canvas{display:block;width:100%;height:100%;}
+@media (max-width:900px){.grain.live{opacity:.09;}}
+
 
 /* ============ iris preloader ============ */
 #ldr{position:fixed;inset:0;z-index:999;background:#0a1414;display:flex;align-items:center;justify-content:center;}

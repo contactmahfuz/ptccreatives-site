@@ -132,6 +132,10 @@ PATA_CSS = """
 .vig{position:fixed;inset:0;z-index:199;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 58%,rgba(5,10,10,.42) 100%);}
 @media (max-width:900px){.grain{opacity:.11;}}
 @media (prefers-reduced-motion:reduce){.grain{animation:none;}}
+.grain.live{inset:0;animation:none;background:none;mix-blend-mode:normal;opacity:.12;}
+.grain.live canvas{display:block;width:100%;height:100%;}
+@media (max-width:900px){.grain.live{opacity:.09;}}
+
 
 /* ============ iris preloader ============ */
 #ldr{position:fixed;inset:0;z-index:999;background:#0a1414;display:flex;align-items:center;justify-content:center;}
@@ -212,6 +216,53 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 """
 
 PATA_JS = """
+/* ===== live film grain: fresh noise every frame, whole site ===== */
+(function(){
+  var el = document.querySelector('.grain');
+  if(!el) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var T = 256, POOL = reduce ? 1 : 10, FPS = 24;
+  var tiles = [];
+  for(var n=0; n<POOL; n++){
+    var t = document.createElement('canvas'); t.width = t.height = T;
+    var tc = t.getContext('2d'), im = tc.createImageData(T, T), d = im.data;
+    for(var i=0; i<d.length; i+=4){
+      var v = 128 + (Math.random() + Math.random() - 1) * 170;
+      v = v < 0 ? 0 : v > 255 ? 255 : v;
+      d[i] = d[i+1] = d[i+2] = v; d[i+3] = 255;
+    }
+    tc.putImageData(im, 0, 0);
+    tiles.push(t);
+  }
+  var cv = document.createElement('canvas'), cx = cv.getContext('2d');
+  if(!cx) return;
+  el.appendChild(cv); el.classList.add('live');
+  var pats = tiles.map(function(t){ return cx.createPattern(t, 'repeat'); });
+  var W = 0, H = 0;
+  function size(){
+    var s = window.innerWidth < 900 ? 1.6 : 1.4;           // grain size in CSS px
+    W = Math.ceil(window.innerWidth / s); H = Math.ceil(window.innerHeight / s);
+    cv.width = W; cv.height = H;
+    draw();
+  }
+  function draw(){
+    var p = pats[(Math.random() * pats.length) | 0];
+    cx.setTransform(1, 0, 0, 1, -((Math.random() * T) | 0), -((Math.random() * T) | 0));
+    cx.fillStyle = p;
+    cx.fillRect(0, 0, W + T, H + T);
+  }
+  var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(size, 150); });
+  size();
+  if(reduce) return;
+  var last = 0, step = 1000 / FPS, run = true;
+  function tick(now){
+    if(run && now - last >= step){ last = now; draw(); }
+    requestAnimationFrame(tick);
+  }
+  document.addEventListener('visibilitychange', function(){ run = !document.hidden; });
+  requestAnimationFrame(tick);
+})();
+
 /* ===== lenis smooth scrolling ===== */
 (function(){
   if(!window.Lenis || !window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
