@@ -283,6 +283,13 @@ body{margin:0;background:#101f1f;}
 .ptc-footer ul{list-style:none;margin:0;padding:0;}
 .ptc-footer .fbot{border-top:1px solid rgba(255,255,255,.08);margin-top:56px;padding:24px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:rgba(255,255,255,.4);font-weight:300;}
 @media (max-width:900px){.ptc-footer .fgrid{grid-template-columns:1fr;gap:36px;}}
+/* touch targets: inline links need real height on phones/tablets */
+@media (max-width:900px){
+  .ptc-footer li a,.ptc-footer p a{display:inline-block;min-height:40px;line-height:40px;}
+  #ptc-main .c-card a{display:inline-block;min-height:44px;line-height:1.5;padding:10px 0;}
+  #ptc-main .ix-row{padding-top:30px;padding-bottom:30px;}
+  .ptc-nav ul a{display:inline-block;min-height:40px;line-height:40px;}
+}
 /* ===== client logo marquee ===== */
 #ptc-main .mq{position:relative;overflow:hidden;margin-top:48px;}
 #ptc-main .mq::before,#ptc-main .mq::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;}

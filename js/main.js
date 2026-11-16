@@ -8,7 +8,7 @@
 
   function fit(){
     var w=hero.clientWidth,s,tx;
-    if(w<700){ s=w/950; tx=-430*s; }      /* mobile: zoom into the artwork cluster */
+    if(w<900){ s=w/950; tx=-430*s; }      /* mobile: zoom into the artwork cluster */
     else     { s=w/1376; tx=0; }          /* desktop: full 16:9 canvas */
     stage.style.transform='translateX('+tx+'px) scale('+s+')';
     wrap.style.height=(768*s)+'px';
