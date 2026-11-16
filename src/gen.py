@@ -3,6 +3,7 @@
 import re, os, shutil
 from PIL import Image
 from home_sections import apply_home, RAIL, HOME_CSS, HOME_JS
+from consent import CONSENT_HTML, CONSENT_CSS, CONSENT_JS
 from pata_section import (SEC_PATA, PATA_CSS, PATA_JS, PRELUDE_HTML,
                           PAGE_CSS, PAGE_JS, SVG_LOTUS, SVG_FISH, SVG_FEATHER)
 
@@ -534,9 +535,22 @@ FOOTER = """<footer class="ptc-footer">
   </div>
   <div class="fbot">
     <span>© <span id="ptc-year">2026</span> PTC Creatives. All rights reserved.</span>
-    <span><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; Inspiring Creative Brilliance</span>
+    <span><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+      <button class="ck-reopen" type="button">Cookie settings</button> &nbsp;·&nbsp;
+      Inspiring Creative Brilliance</span>
   </div>
 </footer>
+<div id="ck" class="ck" role="dialog" aria-label="Cookie choices" hidden>
+    <div class="ck-in">
+      <p class="ck-txt">We use cookies to see what brings people here and to show our work to the right
+      audiences on platforms like Facebook and Instagram. Decline and the site works exactly the same.</p>
+      <div class="ck-act">
+        <a class="ck-more" href="privacy.html">Privacy Policy</a>
+        <button class="ck-btn ck-no" type="button">Decline</button>
+        <button class="ck-btn ck-yes" type="button">Accept</button>
+      </div>
+    </div>
+  </div>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -708,17 +722,25 @@ BODY_PRIVACY = """<div id="ptc-main">
       about. We do not sell your information, rent it, or share it with anyone for marketing. We do not add you
       to a mailing list unless you ask us to.</p>
 
-      <h3 class="ptc-reveal">Cookies and analytics</h3>
-      <p class="ptc-reveal">This website does not set advertising or tracking cookies of its own, and we do not
-      run analytics software on it. Some third-party services listed below may set their own cookies when their
-      content loads.</p>
+      <h3 class="ptc-reveal">Cookies and advertising</h3>
+      <p class="ptc-reveal">We ask before we track you. When you first visit, a banner offers you the choice to
+      accept or decline advertising cookies. Nothing is loaded until you accept, and declining does not change
+      how the site works. Your choice is stored in your own browser so we do not have to ask again, and you can
+      change it at any time through the <button class="ck-reopen" type="button">cookie settings</button> link in
+      the footer.</p>
+      <p class="ptc-reveal">If you accept, we load the Meta pixel, a small piece of code from Meta (Facebook and
+      Instagram). It tells us which pages are visited and lets us show our work to people who have been here
+      before, or to audiences that resemble them. It records the pages you view on this site, your IP address and
+      general browser information, and sets cookies in your browser. If you decline, none of this loads.</p>
+      <p class="ptc-reveal">We do not run any other analytics software on this site.</p>
 
       <h3 class="ptc-reveal">Third parties</h3>
       <p class="ptc-reveal">The site is hosted on GitHub Pages, which records standard server access logs
       including IP addresses. Typefaces load from Google Fonts. If you press play on the showreel, the video is
       served by YouTube, which may set cookies and record the view under its own policy. If the contact form is
-      connected, submissions are delivered through a form-handling service. Each of these providers handles data
-      under its own privacy policy.</p>
+      connected, submissions are delivered through a form-handling service. If you accept advertising cookies,
+      Meta Platforms receives the data described above and processes it under its own data policy. Each of these
+      providers handles data under its own privacy policy.</p>
 
       <h3 class="ptc-reveal">How long we keep it</h3>
       <p class="ptc-reveal">We keep enquiry correspondence for as long as it is useful to the working
@@ -727,8 +749,9 @@ BODY_PRIVACY = """<div id="ptc-main">
       <h3 class="ptc-reveal">Your choices</h3>
       <p class="ptc-reveal">You can ask us what information we hold about you, ask us to correct it, or ask us
       to delete it. Email <a href="mailto:contact@ptccreatives.com">contact@ptccreatives.com</a> and we will
-      respond. You can also block cookies in your browser settings, though some embedded content may then not
-      work.</p>
+      respond. You can withdraw your consent to advertising cookies whenever you like through the cookie
+      settings link in the footer, and you can block cookies in your browser settings, though some embedded
+      content may then not work.</p>
 
       <h3 class="ptc-reveal">Changes</h3>
       <p class="ptc-reveal">If this policy changes, we will update the date at the top of this page.</p>
@@ -767,9 +790,9 @@ BODY_CONTACT = f"""<div id="ptc-main">
 """
 
 # ---------- write files ----------
-css = "/* PTC Creatives — site.css (generated) */\n" + hero_css + "\n" + sect_css + "\n" + EXTRA_CSS + "\n" + PATA_CSS + "\n" + PAGE_CSS + "\n" + HOME_CSS
+css = "/* PTC Creatives — site.css (generated) */\n" + hero_css + "\n" + sect_css + "\n" + EXTRA_CSS + "\n" + PATA_CSS + "\n" + PAGE_CSS + "\n" + HOME_CSS + "\n" + CONSENT_CSS
 open(f"{OUT}/css/site.css", "w").write(detok(css).replace("url(img/", "url(../img/"))  # css lives in css/
-js = "/* PTC Creatives — main.js (generated) */\n" + hero_js + "\n" + sect_js + "\n" + EXTRA_JS + "\n" + PATA_JS + "\n" + PAGE_JS + "\n" + HOME_JS
+js = "/* PTC Creatives — main.js (generated) */\n" + hero_js + "\n" + sect_js + "\n" + EXTRA_JS + "\n" + PATA_JS + "\n" + PAGE_JS + "\n" + HOME_JS + "\n" + CONSENT_JS
 # isolate each module: one uncaught error must never kill the modules after it
 # (real module IIFEs open/close at line starts; inner callbacks never do)
 _starts = len(re.findall(r"^\(function\(\)\{", js, flags=re.M))

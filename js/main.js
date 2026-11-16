@@ -386,3 +386,51 @@
     });
   });
 }catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
+
+
+/* ===== consent-gated marketing tags =====
+   EDIT: paste your Meta Pixel ID between the quotes to switch tracking on.
+   Find it at facebook.com/events_manager -> Data Sources -> your pixel (a ~15-digit number).
+   Leave it empty and nothing loads and no banner is shown. */
+var PTC_META_PIXEL_ID = '';
+
+(function(){try{
+  var KEY = 'ptc-consent';
+  var el = document.getElementById('ck');
+  function get(){ try { return localStorage.getItem(KEY); } catch(e){ return null; } }
+  function set(v){ try { localStorage.setItem(KEY, v); } catch(e){} }
+
+  /* --- Meta Pixel, only ever called after consent --- */
+  function loadMeta(){
+    if (!PTC_META_PIXEL_ID || window.fbq) return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+      (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', PTC_META_PIXEL_ID);
+    window.fbq('track', 'PageView');
+  }
+  /* add other platforms here (TikTok, LinkedIn, Google Ads) so they stay consent-gated too */
+  function loadAll(){ loadMeta(); }
+
+  var choice = get();
+  if (choice === 'yes') { loadAll(); }
+  else if (!choice && el && PTC_META_PIXEL_ID) { el.hidden = false; }
+
+  if (el) {
+    var yes = el.querySelector('.ck-yes'), no = el.querySelector('.ck-no');
+    if (yes) yes.addEventListener('click', function(){ set('yes'); el.hidden = true; loadAll(); });
+    if (no)  no.addEventListener('click',  function(){ set('no');  el.hidden = true; });
+  }
+  /* footer "Cookie settings" lets a visitor change their mind */
+  document.querySelectorAll('.ck-reopen').forEach(function(b){
+    b.addEventListener('click', function(ev){ ev.preventDefault(); if (el) el.hidden = false; });
+  });
+
+  /* fire a Lead event when the contact form is submitted, if consent was given */
+  var f = document.querySelector('.ptc-form');
+  if (f) f.addEventListener('submit', function(){
+    if (get() === 'yes' && window.fbq) window.fbq('track', 'Lead');
+  });
+}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
