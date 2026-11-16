@@ -334,7 +334,6 @@
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   document.querySelectorAll('#ptc-main .card').forEach(function(card){
     gsap.set(card,{transformPerspective:900,transformStyle:'preserve-3d'});
-    var m=card.querySelector('.card-top .m'); if(m) gsap.set(m,{z:46});
     var rx=gsap.quickTo(card,'rotationX',{duration:.5,ease:'power2'});
     var ry=gsap.quickTo(card,'rotationY',{duration:.5,ease:'power2'});
     card.addEventListener('mousemove',function(e){

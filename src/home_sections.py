@@ -98,7 +98,6 @@ HOME_CSS = """
 #ptc-main .card{position:relative;overflow:hidden;}
 #ptc-main .card::after{content:'';position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(23,156,151,.22) 48%,rgba(244,233,210,.12) 52%,transparent 70%);transform:translateX(-130%);transition:transform .8s ease;}
 #ptc-main .card:hover::after{transform:translateX(130%);}
-#ptc-main .card .card-top{transform-style:preserve-3d;}
 /* ===== odometer stats in sprocket frames ===== */
 #ptc-main .stat{position:relative;background:#15292a;padding:40px 30px 34px;border-radius:4px;overflow:hidden;}
 #ptc-main .stat::before,#ptc-main .stat::after{content:'';position:absolute;top:8px;bottom:8px;width:10px;border-radius:2px;background:repeating-linear-gradient(180deg,transparent 0 9px,rgba(10,20,20,.95) 9px 17px);}
@@ -132,7 +131,7 @@ HOME_CSS = """
 /* ===== selected work: photo cover cards ===== */
 #ptc-main .work-grid{grid-template-columns:1fr 1fr;gap:30px;}
 #ptc-main .work-grid .card:nth-child(even){margin-top:70px;}
-#ptc-main .card-top{height:auto;aspect-ratio:16/9;padding:0;display:block;background:#0e1c1c;}
+#ptc-main .card-top{height:auto;aspect-ratio:16/9;padding:0;display:block;background:#0e1c1c;overflow:hidden;}
 #ptc-main .card-top img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   transition:transform .7s cubic-bezier(.2,.8,.3,1),filter .5s;filter:saturate(.92) brightness(.9);}
 #ptc-main .card:hover .card-top img{transform:scale(1.07);filter:none;}
@@ -190,7 +189,6 @@ HOME_JS = """
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   document.querySelectorAll('#ptc-main .card').forEach(function(card){
     gsap.set(card,{transformPerspective:900,transformStyle:'preserve-3d'});
-    var m=card.querySelector('.card-top .m'); if(m) gsap.set(m,{z:46});
     var rx=gsap.quickTo(card,'rotationX',{duration:.5,ease:'power2'});
     var ry=gsap.quickTo(card,'rotationY',{duration:.5,ease:'power2'});
     card.addEventListener('mousemove',function(e){
