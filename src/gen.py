@@ -529,7 +529,7 @@ def head(title, desc, fname="index.html", p=""):
 <link rel="stylesheet" href="{p}css/site.css">
 </head>
 <body>
-""" + PRELUDE_HTML
+""" + PRELUDE_HTML.replace('src="img/', f'src="{p}img/')
 
 def nav(active, day=False, p=""):
     links = "".join(f'<li><a href="{p}{href}"{" class=\"on\"" if label==active else ""}>{label}</a></li>'
