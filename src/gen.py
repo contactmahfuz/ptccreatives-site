@@ -643,7 +643,7 @@ SERVICES = [
     ("Content Strategy",
      "Data-driven content plans that turn posting into a system, built for engagement, visibility and measurable business growth.",
      ["Messaging &amp; positioning","Content pillars &amp; calendar","Platform strategy","KPI framework &amp; reporting"]),
-    ("Graphic Design &amp; Printing",
+    ("Branding, Design &amp; Merchandising",
      "Ideas turned into bold visuals that strengthen brand identity and capture attention, on screen and on paper.",
      ["Brand identity","Campaign key visuals","Social media creatives","Print collateral"]),
     ("Social Media Management",
