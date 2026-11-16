@@ -9,6 +9,7 @@ IX_ROWS = [
     ("04", "Graphic Design &amp; Printing", "Identities and visuals, on screen and on paper.",       "img/lotus.webp"),
     ("05", "Social Media Management", "Calendars, captions and growth that compounds.",              "img/fish2.webp"),
     ("06", "Web Presence",      "Websites and landing pages built to convert.",                      "img/ribbon.webp"),
+    ("07", "PR &amp; Activation", "Press, partnerships and live activations that get you noticed.",    "img/figure.webp"),
 ]
 _rows = "".join(f"""      <a class="ix-row ptc-reveal" href="services.html" data-img="{img}">
         <span class="ix-num">{num}</span>
@@ -52,7 +53,7 @@ RAIL = """
     <a class="rail-f" href="#ptc-hero" title="Intro"></a>
     <a class="rail-f" href="#pata" title="Our Story"></a>
     <a class="rail-f" href="#services" title="Services"></a>
-    <a class="rail-f" href="#featured" title="Featured Film"></a>
+    <a class="rail-f" href="#featured" title="Showreel"></a>
     <a class="rail-f" href="#work" title="Selected Work"></a>
     <a class="rail-f" href="#stats" title="The Numbers"></a>
     <a class="rail-f" href="#start" title="Start Your Story"></a>
@@ -66,7 +67,7 @@ def apply_home(s):
                   '<section class="alt" id="stats">\n    <div class="stat-grid">')
     s = re.sub(r'<section class="cta dots">.*?</section>', SEC_DIAL, s, flags=re.S)
     s = s.replace('<section class="dots" id="services">', _ghost("WHAT WE DO") + '<section class="dots" id="services">')
-    s = s.replace('<section class="dots" id="featured">', _ghost("FEATURED FILM", True) + '<section class="dots" id="featured">')
+    s = s.replace('<section class="dots" id="featured">', _ghost("SHOWREEL", True) + '<section class="dots" id="featured">')
     s = s.replace('<section class="alt" id="work">', _ghost("SELECTED WORK") + '<section class="alt" id="work">')
     s = s.replace('<section class="alt" id="stats">', _ghost("THE NUMBERS", True) + '<section class="alt" id="stats">')
     return s

@@ -165,15 +165,15 @@ def grab(name, pat):
 SEC_FEATURED = """
   <!-- ===== FEATURED FILM ===== -->
   <section class="dots" id="featured">
-    <p class="ptc-eyeb ptc-reveal">Featured Film</p>
-    <h2 class="ptc-reveal">See Us <em>in Motion</em></h2>
-    <p class="lead ptc-reveal">A recent production. Press play.</p>
+    <p class="ptc-eyeb ptc-reveal">Showreel</p>
+    <h2 class="ptc-reveal">Our Work, <em>in Motion</em></h2>
+    <p class="lead ptc-reveal">A highlight reel of the films, campaigns and brands we have built. Press play.</p>
     <div class="film ptc-reveal">
-      <div class="film-frame" data-yt="YJovd_GEqYw" role="button" tabindex="0" aria-label="Play PTC Creatives film">
+      <div class="film-frame" data-yt="YJovd_GEqYw" role="button" tabindex="0" aria-label="Play the PTC Creatives showreel">
         <img class="film-thumb" src="https://i.ytimg.com/vi/YJovd_GEqYw/maxresdefault.jpg" alt="" loading="lazy" onerror="this.remove()">
         <span class="film-shade" aria-hidden="true"></span>
         <span class="film-play" aria-hidden="true"></span>
-        <div class="film-cap"><span>Watch</span><b>PTC Creatives</b><!-- EDIT: set the video's title here --></div>
+        <div class="film-cap"><span>Showreel</span><b>PTC Creatives Highlights</b></div>
       </div>
     </div>
   </section>
@@ -274,6 +274,13 @@ body{margin:0;background:#101f1f;}
 #ptc-main .ptc-form button:hover{background:#179c97;color:#101f1f;}
 #ptc-main .fmsg{display:none;margin-top:16px;color:#e8a317;font-weight:300;font-size:14px;}
 @media (max-width:900px){#ptc-main .c-grid{grid-template-columns:1fr;}#ptc-main .ptc-form .frow{grid-template-columns:1fr;}}
+/* ===== legal / privacy ===== */
+#ptc-main .legal{max-width:760px;}
+#ptc-main .legal h3{font-size:20px;font-weight:600;color:#fff;margin:40px 0 12px;}
+#ptc-main .legal p{font-weight:300;font-size:16px;line-height:1.85;color:rgba(255,255,255,.78);margin:0 0 14px;}
+#ptc-main .legal p em{font-style:normal;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#179c97;}
+#ptc-main .legal a{color:#179c97;text-decoration:none;border-bottom:1px solid rgba(23,156,151,.4);}
+#ptc-main .legal a:hover{color:#e8a317;border-bottom-color:#e8a317;}
 /* ===== footer ===== */
 .ptc-footer{background:#0a1414;font-family:'Poppins',sans-serif;padding:76px 7vw 0;}
 .ptc-footer .fgrid{display:grid;grid-template-columns:1.2fr .8fr 1fr;gap:50px;}
@@ -286,7 +293,7 @@ body{margin:0;background:#101f1f;}
 @media (max-width:900px){.ptc-footer .fgrid{grid-template-columns:1fr;gap:36px;}}
 /* touch targets: inline links need real height on phones/tablets */
 @media (max-width:900px){
-  .ptc-footer li a,.ptc-footer p a{display:inline-block;min-height:40px;line-height:40px;}
+  .ptc-footer li a,.ptc-footer p a,.ptc-footer .fbot a{display:inline-block;min-height:40px;line-height:40px;}
   #ptc-main .c-card a{display:inline-block;min-height:44px;line-height:1.5;padding:10px 0;}
   #ptc-main .ix-row{padding-top:30px;padding-bottom:30px;}
   .ptc-nav ul a{display:inline-block;min-height:40px;line-height:40px;}
@@ -413,10 +420,45 @@ PAGES = {
     "services.html":     ("Services",     "Services | PTC Creatives", "Video production, content audit, content strategy, design & printing, social media management and web presence."),
     "case-studies.html": ("Case Studies", "Case Studies | PTC Creatives", "Selected work: documentaries, campaigns, podcasts and corporate films by PTC Creatives."),
     "contact.html":      ("Contact",      "Contact | PTC Creatives", "Schedule a free strategy call with PTC Creatives. No strings attached."),
+    "privacy.html":      ("Privacy",      "Privacy Policy | PTC Creatives", "How PTC Creatives handles information collected through ptccreatives.com."),
 }
 NAV_ITEMS = [("Home","index.html"),("About","about.html"),("Services","services.html"),("Case Studies","case-studies.html")]
 
-def head(title, desc):
+SITE = "https://ptccreatives.com"
+
+JSONLD = """<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"ProfessionalService",
+ "name":"PTC Creatives",
+ "alternateName":"PTC",
+ "slogan":"Inspiring Creative Brilliance",
+ "description":"Creative production agency in Dhaka, Bangladesh: video production, documentaries, podcasts, design, events, PR and digital campaigns.",
+ "url":"https://ptccreatives.com/",
+ "logo":"https://ptccreatives.com/img/favicon.png",
+ "image":"https://ptccreatives.com/img/og.jpg",
+ "email":"contact@ptccreatives.com",
+ "telephone":"+8801762206983",
+ "address":{
+  "@type":"PostalAddress",
+  "streetAddress":"H-1263, Road 10, Avenue 2, Mirpur DOHS",
+  "addressLocality":"Dhaka",
+  "postalCode":"1216",
+  "addressCountry":"BD"
+ },
+ "areaServed":"Worldwide",
+ "sameAs":[
+  "https://www.facebook.com/PTCcreatives",
+  "https://www.instagram.com/ptccreatives/",
+  "https://www.linkedin.com/company/ptc-creatives"
+ ]
+}
+</script>
+"""
+
+def head(title, desc, fname="index.html"):
+    canon = SITE + "/" + ("" if fname == "index.html" else fname)
+    ld = JSONLD if fname == "index.html" else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -424,10 +466,22 @@ def head(title, desc):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<link rel="canonical" href="{canon}">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#101f1f">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="img/og.jpg">
+<meta property="og:image" content="{SITE}/img/og.jpg">
+<meta property="og:image:alt" content="PTC Creatives, a Patachitra-inspired illustration of a storyteller filming">
+<meta property="og:url" content="{canon}">
+<meta property="og:site_name" content="PTC Creatives">
+<meta property="og:locale" content="en_US">
 <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{desc}">
+<meta name="twitter:image" content="{SITE}/img/og.jpg">
+{ld}
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -480,7 +534,7 @@ FOOTER = """<footer class="ptc-footer">
   </div>
   <div class="fbot">
     <span>© <span id="ptc-year">2026</span> PTC Creatives. All rights reserved.</span>
-    <span>Inspiring Creative Brilliance</span>
+    <span><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; Inspiring Creative Brilliance</span>
   </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
@@ -531,6 +585,10 @@ BODY_ABOUT = f"""<div id="ptc-main">
 """
 
 SVC_ICONS = re.findall(r"(<svg viewBox=\"0 0 48 48\">.*?</svg>)", sect_body, re.S)
+# the homepage grid supplies six icons; PR & Activation brings its own (megaphone)
+SVC_ICONS.append('<svg viewBox="0 0 48 48"><path d="M8 20v8a3 3 0 003 3h4l12 7V10L15 17h-4a3 3 0 00-3 3z"/>'
+                 '<path d="M15 31v8a2 2 0 002 2h3a2 2 0 002-2v-6"/><path d="M34 18c3 3 3 9 0 12"/>'
+                 '<path d="M39 13c6 6 6 16 0 22"/></svg>')
 
 SERVICES = [
     ("Video Production",
@@ -551,6 +609,9 @@ SERVICES = [
     ("Web Presence",
      "Responsive websites, search optimisation and cohesive digital branding, so everything online points the same direction.",
      ["Websites &amp; landing pages","Search engine optimisation","Digital brand consistency"]),
+    ("PR &amp; Activation",
+     "Campaigns that move from the screen to the street: press outreach, brand partnerships and live activations that put your story in front of real audiences.",
+     ["Press &amp; media outreach","Launch events &amp; activations","Influencer &amp; partnership campaigns","Coverage reporting"]),
 ]
 rows = ""
 for i, (name, desc, items) in enumerate(SERVICES):
@@ -619,6 +680,63 @@ BODY_CASES = f"""<div id="ptc-main">
 </div>
 """
 
+
+BODY_PRIVACY = """<div id="ptc-main">
+  <section class="band dots pg-day">
+    {BAND_SUN}
+    {BM_LOTUS}
+    <p class="ptc-eyeb ptc-reveal">Legal</p>
+    <h1 class="ptc-reveal">Privacy <em>Policy</em></h1>
+    <p class="lead ptc-reveal">How we handle information collected through this website.</p>
+  </section>
+  <section class="dots pg-grad-contact" style="padding-top:30px;">
+    <div class="legal">
+      <p class="ptc-reveal"><em>Last updated: 16 November 2026</em></p>
+
+      <h3 class="ptc-reveal">Who we are</h3>
+      <p class="ptc-reveal">PTC Creatives is a creative production agency based at H-1263, Road 10, Avenue 2,
+      Mirpur DOHS, Dhaka-1216, Bangladesh. This policy covers the website at ptccreatives.com. If you have any
+      question about it, write to <a href="mailto:contact@ptccreatives.com">contact@ptccreatives.com</a>.</p>
+
+      <h3 class="ptc-reveal">What we collect</h3>
+      <p class="ptc-reveal">We collect only what you choose to send us. If you fill in the contact form, we
+      receive the name, email address, company name and message you enter. If you email or call us directly,
+      we hold whatever you share in that conversation. We do not ask for payment details through this site.</p>
+
+      <h3 class="ptc-reveal">How we use it</h3>
+      <p class="ptc-reveal">We use your details only to reply to you and to discuss work you have asked us
+      about. We do not sell your information, rent it, or share it with anyone for marketing. We do not add you
+      to a mailing list unless you ask us to.</p>
+
+      <h3 class="ptc-reveal">Cookies and analytics</h3>
+      <p class="ptc-reveal">This website does not set advertising or tracking cookies of its own, and we do not
+      run analytics software on it. Some third-party services listed below may set their own cookies when their
+      content loads.</p>
+
+      <h3 class="ptc-reveal">Third parties</h3>
+      <p class="ptc-reveal">The site is hosted on GitHub Pages, which records standard server access logs
+      including IP addresses. Typefaces load from Google Fonts. If you press play on the showreel, the video is
+      served by YouTube, which may set cookies and record the view under its own policy. If the contact form is
+      connected, submissions are delivered through a form-handling service. Each of these providers handles data
+      under its own privacy policy.</p>
+
+      <h3 class="ptc-reveal">How long we keep it</h3>
+      <p class="ptc-reveal">We keep enquiry correspondence for as long as it is useful to the working
+      relationship, and delete it on request.</p>
+
+      <h3 class="ptc-reveal">Your choices</h3>
+      <p class="ptc-reveal">You can ask us what information we hold about you, ask us to correct it, or ask us
+      to delete it. Email <a href="mailto:contact@ptccreatives.com">contact@ptccreatives.com</a> and we will
+      respond. You can also block cookies in your browser settings, though some embedded content may then not
+      work.</p>
+
+      <h3 class="ptc-reveal">Changes</h3>
+      <p class="ptc-reveal">If this policy changes, we will update the date at the top of this page.</p>
+    </div>
+  </section>
+</div>
+"""
+
 BODY_CONTACT = f"""<div id="ptc-main">
   <section class="band dots pg-day">
     {BAND_SUN}
@@ -662,9 +780,26 @@ js = re.sub(r"^\}\)\(\);", "}catch(_e){if(window.console&&console.warn)console.w
 open(f"{OUT}/js/main.js", "w").write(js)
 
 bodies = {"index.html": BODY_INDEX, "about.html": BODY_ABOUT, "services.html": BODY_SERVICES,
-          "case-studies.html": BODY_CASES, "contact.html": BODY_CONTACT}
+          "case-studies.html": BODY_CASES, "contact.html": BODY_CONTACT,
+          "privacy.html": BODY_PRIVACY.replace("{BAND_SUN}", BAND_SUN).replace("{BM_LOTUS}", BM_LOTUS)}
 for fname, (active, title, desc) in PAGES.items():
-    html = head(title, desc) + nav(active, day=(fname != "index.html")) + detok(bodies[fname]) + FOOTER
+    html = head(title, desc, fname) + nav(active, day=(fname != "index.html")) + detok(bodies[fname]) + FOOTER
     open(f"{OUT}/{fname}", "w").write(html)
     print(fname, len(html)//1024, "KB")
+# ---------- robots.txt + sitemap.xml ----------
+import datetime
+_today = datetime.date.today().isoformat()
+open(f"{OUT}/robots.txt", "w").write(
+    "User-agent: *\nAllow: /\n\nSitemap: " + SITE + "/sitemap.xml\n")
+_prio = {"index.html": "1.0", "services.html": "0.9", "case-studies.html": "0.9",
+         "about.html": "0.8", "contact.html": "0.8", "privacy.html": "0.3"}
+_urls = ""
+for _f in PAGES:
+    _loc = SITE + "/" + ("" if _f == "index.html" else _f)
+    _urls += (f"  <url>\n    <loc>{_loc}</loc>\n    <lastmod>{_today}</lastmod>\n"
+              f"    <changefreq>monthly</changefreq>\n    <priority>{_prio.get(_f,'0.5')}</priority>\n  </url>\n")
+open(f"{OUT}/sitemap.xml", "w").write(
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + _urls + "</urlset>\n")
+print("seo: robots.txt + sitemap.xml (" + str(len(PAGES)) + " urls)")
 print("css", os.path.getsize(f"{OUT}/css/site.css")//1024, "KB; js", os.path.getsize(f"{OUT}/js/main.js")//1024, "KB")
