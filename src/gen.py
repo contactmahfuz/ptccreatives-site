@@ -522,6 +522,7 @@ def head(title, desc, fname="index.html", p=""):
 <meta name="twitter:image" content="{SITE}/img/og.jpg">
 {ld}
 <link rel="icon" type="image/png" href="{p}img/favicon.png">
+<script>if(location.pathname.slice(-11)==='/index.html')history.replaceState(null,'',location.pathname.slice(0,-10)+location.search+location.hash);</script>
 <link rel="apple-touch-icon" href="{p}img/apple-touch.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -532,10 +533,10 @@ def head(title, desc, fname="index.html", p=""):
 """ + PRELUDE_HTML.replace('src="img/', f'src="{p}img/')
 
 def nav(active, day=False, p=""):
-    links = "".join(f'<li><a href="{p}{href}"{" class=\"on\"" if label==active else ""}>{label}</a></li>'
+    links = "".join(f'<li><a href="{"/" if href=="index.html" else p+href}"{" class=\"on\"" if label==active else ""}>{label}</a></li>'
                     for label, href in NAV_ITEMS)
     return f"""<nav class="ptc-nav{' nav-day' if day else ''}">
-  <a class="nlogo" href="{p}index.html"><img class="lg-l" src="{p}img/logo.webp" alt="PTC Creatives"><img class="lg-d" src="{p}img/logo_dark.webp" alt="PTC Creatives"></a>
+  <a class="nlogo" href="/"><img class="lg-l" src="{p}img/logo.webp" alt="PTC Creatives"><img class="lg-d" src="{p}img/logo_dark.webp" alt="PTC Creatives"></a>
   <ul>{links}<li><a class="ncta" href="{p}contact.html">Contact Us</a></li></ul>
   <button class="nburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
@@ -555,7 +556,7 @@ def footer(p=""):
     <div>
       <h4>Explore</h4>
       <ul>
-        <li><a href="{p}index.html">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li><a href="{p}about.html">About</a></li>
         <li><a href="{p}services.html">Services</a></li>
         <li><a href="{p}case-studies.html">Case Studies</a></li>

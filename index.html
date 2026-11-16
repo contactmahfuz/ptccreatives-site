@@ -50,6 +50,7 @@
 </script>
 
 <link rel="icon" type="image/png" href="img/favicon.png">
+<script>if(location.pathname.slice(-11)==='/index.html')history.replaceState(null,'',location.pathname.slice(0,-10)+location.search+location.hash);</script>
 <link rel="apple-touch-icon" href="img/apple-touch.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -68,8 +69,8 @@ setTimeout(function(){l.parentNode&&l.parentNode.removeChild(l)},550)}},2400);})
 <div class="vig" aria-hidden="true"></div>
 <div id="curd" aria-hidden="true"></div><div id="curr" aria-hidden="true"></div>
 <nav class="ptc-nav">
-  <a class="nlogo" href="index.html"><img class="lg-l" src="img/logo.webp" alt="PTC Creatives"><img class="lg-d" src="img/logo_dark.webp" alt="PTC Creatives"></a>
-  <ul><li><a href="index.html" class="on">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="case-studies.html">Case Studies</a></li><li><a class="ncta" href="contact.html">Contact Us</a></li></ul>
+  <a class="nlogo" href="/"><img class="lg-l" src="img/logo.webp" alt="PTC Creatives"><img class="lg-d" src="img/logo_dark.webp" alt="PTC Creatives"></a>
+  <ul><li><a href="/" class="on">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="case-studies.html">Case Studies</a></li><li><a class="ncta" href="contact.html">Contact Us</a></li></ul>
   <button class="nburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 <section id="ptc-hero">
@@ -381,7 +382,7 @@ setTimeout(function(){l.parentNode&&l.parentNode.removeChild(l)},550)}},2400);})
     <div>
       <h4>Explore</h4>
       <ul>
-        <li><a href="index.html">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="case-studies.html">Case Studies</a></li>
