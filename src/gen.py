@@ -18,8 +18,26 @@ IMGS = {"sun": "sun.webp", "figure": "figure.webp", "ribbon": "ribbon_embed.webp
 for k, f in IMGS.items():
     shutil.copy(f"layers/{f}", f"{OUT}/img/{k}.webp")
 shutil.copy("/mnt/user-data/uploads/bcad9c23-image.jpg", f"{OUT}/img/og.jpg")
-sun = Image.open("layers/sun.png")
-sun.resize((64, round(sun.height*64/sun.width)), Image.LANCZOS).save(f"{OUT}/img/favicon.png")
+# ---------- favicon: PTC wordmark on a cream pata-paper tile ----------
+def _make_icon(size, out):
+    tile = Image.new("RGBA", (size, size), (244, 233, 210, 255))
+    mark = Image.open("iconsrc/site-icon.png").convert("RGBA")
+    mw = round(size * 0.82)
+    mh = round(mark.height * mw / mark.width)
+    mark = mark.resize((mw, mh), Image.LANCZOS)
+    tile.paste(mark, ((size - mw) // 2, (size - mh) // 2), mark)
+    # softly rounded corners
+    from PIL import ImageDraw
+    m = Image.new("L", (size, size), 0)
+    ImageDraw.Draw(m).rounded_rectangle([0, 0, size, size], radius=size // 6, fill=255)
+    tile.putalpha(m)
+    tile.save(f"{OUT}/img/{out}")
+if os.path.exists("iconsrc/site-icon.png"):
+    _make_icon(192, "favicon.png")
+    _make_icon(180, "apple-touch.png")
+else:
+    sun = Image.open("layers/sun.png")
+    sun.resize((64, round(sun.height*64/sun.width)), Image.LANCZOS).save(f"{OUT}/img/favicon.png")
 
 # ---------- team photos: center-crop to 2:3, uniform size ----------
 os.makedirs(f"{OUT}/img/team", exist_ok=True)
@@ -403,6 +421,7 @@ def head(title, desc):
 <meta property="og:image" content="img/og.jpg">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/tw.css">
