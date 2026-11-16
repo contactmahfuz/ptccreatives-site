@@ -4,6 +4,7 @@ import re, os, shutil
 from PIL import Image
 from home_sections import apply_home, RAIL, HOME_CSS, HOME_JS
 from consent import CONSENT_HTML, CONSENT_CSS, CONSENT_JS
+from casestudy import build_case, CS_CSS, CS_JS
 from pata_section import (SEC_PATA, PATA_CSS, PATA_JS, PRELUDE_HTML,
                           PAGE_CSS, PAGE_JS, SVG_LOTUS, SVG_FISH, SVG_FEATHER)
 
@@ -494,7 +495,7 @@ JSONLD = """<script type="application/ld+json">
 </script>
 """
 
-def head(title, desc, fname="index.html"):
+def head(title, desc, fname="index.html", p=""):
     canon = SITE + "/" + ("" if fname == "index.html" else fname)
     ld = JSONLD if fname == "index.html" else ""
     return f"""<!DOCTYPE html>
@@ -520,22 +521,22 @@ def head(title, desc, fname="index.html"):
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{SITE}/img/og.jpg">
 {ld}
-<link rel="icon" type="image/png" href="img/favicon.png">
-<link rel="apple-touch-icon" href="img/apple-touch.png">
+<link rel="icon" type="image/png" href="{p}img/favicon.png">
+<link rel="apple-touch-icon" href="{p}img/apple-touch.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tw.css">
-<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="{p}css/tw.css">
+<link rel="stylesheet" href="{p}css/site.css">
 </head>
 <body>
 """ + PRELUDE_HTML
 
-def nav(active, day=False):
-    links = "".join(f'<li><a href="{href}"{" class=\"on\"" if label==active else ""}>{label}</a></li>'
+def nav(active, day=False, p=""):
+    links = "".join(f'<li><a href="{p}{href}"{" class=\"on\"" if label==active else ""}>{label}</a></li>'
                     for label, href in NAV_ITEMS)
     return f"""<nav class="ptc-nav{' nav-day' if day else ''}">
-  <a class="nlogo" href="index.html"><img class="lg-l" src="img/logo.webp" alt="PTC Creatives"><img class="lg-d" src="img/logo_dark.webp" alt="PTC Creatives"></a>
-  <ul>{links}<li><a class="ncta" href="contact.html">Contact Us</a></li></ul>
+  <a class="nlogo" href="{p}index.html"><img class="lg-l" src="{p}img/logo.webp" alt="PTC Creatives"><img class="lg-d" src="{p}img/logo_dark.webp" alt="PTC Creatives"></a>
+  <ul>{links}<li><a class="ncta" href="{p}contact.html">Contact Us</a></li></ul>
   <button class="nburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 """
@@ -544,20 +545,21 @@ def band_motif(svg):
     return '<span class="band-motif" aria-hidden="true">' + svg.replace('class="dr ', 'class="dr dr-page ') + '</span>'
 BM_LOTUS, BM_FISH, BM_FEATHER = band_motif(SVG_LOTUS), band_motif(SVG_FISH), band_motif(SVG_FEATHER)
 
-FOOTER = """<footer class="ptc-footer">
+def footer(p=""):
+  return f"""<footer class="ptc-footer">
   <div class="fgrid">
     <div>
-      <img class="flogo" src="img/logo.webp" alt="PTC Creatives">
+      <img class="flogo" src="{p}img/logo.webp" alt="PTC Creatives">
       <p>Inspiring Creative Brilliance for businesses all around the world. A creative production house based in Dhaka, Bangladesh.</p>
     </div>
     <div>
       <h4>Explore</h4>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="case-studies.html">Case Studies</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="{p}index.html">Home</a></li>
+        <li><a href="{p}about.html">About</a></li>
+        <li><a href="{p}services.html">Services</a></li>
+        <li><a href="{p}case-studies.html">Case Studies</a></li>
+        <li><a href="{p}contact.html">Contact</a></li>
       </ul>
     </div>
     <div>
@@ -572,16 +574,16 @@ FOOTER = """<footer class="ptc-footer">
   </div>
   <div class="fbot">
     <span>© <span id="ptc-year">2026</span> PTC Creatives. All rights reserved.</span>
-    <span><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+    <span><a href="{p}privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
       <button class="ck-reopen" type="button">Cookie settings</button> &nbsp;·&nbsp;
       Inspiring Creative Brilliance</span>
   </div>
 </footer>
-""" + CONSENT_HTML + """
+""" + CONSENT_HTML + f"""
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="js/main.js"></script>
+<script src="{p}js/main.js"></script>
 </body>
 </html>
 """
@@ -676,6 +678,29 @@ BODY_SERVICES = f"""<div id="ptc-main">
 </div>
 """
 
+# ---------- case studies (horizontal) ----------
+# Add a dict per project. Everything after "approach" is optional.
+CASE_STUDIES = [
+  {
+    "slug": "future-of-capitalism",
+    "title": "Future of Capitalism",
+    "client": "IBACC",
+    "category": "Event Management",
+    "year": "2026",
+    "cover": "foc",
+    "summary": "A startup competition where every logistic ran through our team, from the stage and set design to execution on the day.",
+    "brief_head": "A competition that had to feel national",
+    "brief": "IBACC came to us with a startup competition and a room to fill. It needed to look like a national platform from the first photograph, and every part of it had to be handled by one team rather than stitched together from vendors.",
+    "approach_head": "One team, from drawing to doors open",
+    "approach": "We took the whole production in-house: set and stage design, build, lighting, run of show and live coverage. Our crew was on site through the build and stayed through to the final session, shooting stills and video as it happened.",
+    "approach_points": ["Stage &amp; set design","Full build and logistics","Lighting and AV","Run of show","Event photography","Video coverage"],
+    "gallery": ["foc","fbc","chronicles"],
+    "result_head": "A platform that looked the part",
+    "results": [],
+    "result_text": "PLACEHOLDER: send turnout, reach, coverage or any numbers you have and they drop in here as headline figures.",
+  },
+]
+
 CASES = [
     ("foc","Event Management","Future of Capitalism","IBACC",
      "A startup competition where every logistic ran through our team, from the stage and set design to execution on the day."),
@@ -698,10 +723,11 @@ CASES = [
 cards = ""
 for _i, _c in enumerate(CASES):
     img, tag, title, client, desc = _c[:5]
-    url = _c[5] if len(_c) > 5 else None
-    _o = f'<a class="card ptc-reveal" href="{url}" target="_blank" rel="noopener">' if url else '<div class="card ptc-reveal">'
+    _slug = {c["title"]: c["slug"] for c in CASE_STUDIES}.get(title)
+    url = ("work/" + _slug + "/") if _slug else (_c[5] if len(_c) > 5 else None)
+    _o = f'<a class="card ptc-reveal" href="{url}">' if url else '<div class="card ptc-reveal">'
     _end = "</a>" if url else "</div>"
-    _go = '<span class="card-go">Watch &rarr;</span>' if url else ""
+    _go = '<span class="card-go">View Case Study &rarr;</span>' if url else ""
     cards += f"""      {_o}
         <div class="card-top"><img src="img/work/{img}.webp" alt="{title}" loading="lazy">
           <span class="tag">{tag}</span><span class="card-n">{_i+1:02d}</span></div>
@@ -821,9 +847,9 @@ BODY_CONTACT = f"""<div id="ptc-main">
 """
 
 # ---------- write files ----------
-css = "/* PTC Creatives — site.css (generated) */\n" + hero_css + "\n" + sect_css + "\n" + EXTRA_CSS + "\n" + PATA_CSS + "\n" + PAGE_CSS + "\n" + HOME_CSS + "\n" + CONSENT_CSS
+css = "/* PTC Creatives — site.css (generated) */\n" + hero_css + "\n" + sect_css + "\n" + EXTRA_CSS + "\n" + PATA_CSS + "\n" + PAGE_CSS + "\n" + HOME_CSS + "\n" + CONSENT_CSS + "\n" + CS_CSS
 open(f"{OUT}/css/site.css", "w").write(detok(css).replace("url(img/", "url(../img/"))  # css lives in css/
-js = "/* PTC Creatives — main.js (generated) */\n" + hero_js + "\n" + sect_js + "\n" + EXTRA_JS + "\n" + PATA_JS + "\n" + PAGE_JS + "\n" + HOME_JS + "\n" + CONSENT_JS
+js = "/* PTC Creatives — main.js (generated) */\n" + hero_js + "\n" + sect_js + "\n" + EXTRA_JS + "\n" + PATA_JS + "\n" + PAGE_JS + "\n" + HOME_JS + "\n" + CONSENT_JS + "\n" + CS_JS
 # isolate each module: one uncaught error must never kill the modules after it
 # (real module IIFEs open/close at line starts; inner callbacks never do)
 _starts = len(re.findall(r"^\(function\(\)\{", js, flags=re.M))
@@ -837,9 +863,28 @@ bodies = {"index.html": BODY_INDEX, "about.html": BODY_ABOUT, "services.html": B
           "case-studies.html": BODY_CASES, "contact.html": BODY_CONTACT,
           "privacy.html": BODY_PRIVACY.replace("{BAND_SUN}", BAND_SUN).replace("{BM_LOTUS}", BM_LOTUS)}
 for fname, (active, title, desc) in PAGES.items():
-    html = head(title, desc, fname) + nav(active, day=(fname != "index.html")) + detok(bodies[fname]) + FOOTER
+    html = head(title, desc, fname) + nav(active, day=(fname != "index.html")) + detok(bodies[fname]) + footer()
     open(f"{OUT}/{fname}", "w").write(html)
     print(fname, len(html)//1024, "KB")
+# case study pages at /work/<slug>/
+CASE_URLS = []
+for _ci, _cs in enumerate(CASE_STUDIES):
+    _d = f"{OUT}/work/{_cs['slug']}"
+    os.makedirs(_d, exist_ok=True)
+    _nxt = CASE_STUDIES[(_ci + 1) % len(CASE_STUDIES)] if len(CASE_STUDIES) > 1 else None
+    _c = dict(_cs)
+    if _nxt: _c["next"] = {"title": _nxt["title"], "href": "../" + _nxt["slug"] + "/"}
+    _p = "../../"
+    _title = f"{_cs['title']} | PTC Creatives"
+    _desc = _cs["summary"][:155]
+    _html = (head(_title, _desc, f"work/{_cs['slug']}/", _p)
+             + nav("Case Studies", day=True, p=_p)
+             + build_case(_c, _p)
+             + footer(_p))
+    open(f"{_d}/index.html", "w").write(_html)
+    CASE_URLS.append(f"work/{_cs['slug']}/")
+    print("case:", _cs["slug"])
+
 # ---------- robots.txt + sitemap.xml ----------
 import datetime
 _today = datetime.date.today().isoformat()
@@ -847,13 +892,14 @@ open(f"{OUT}/robots.txt", "w").write(
     "User-agent: *\nAllow: /\n\nSitemap: " + SITE + "/sitemap.xml\n")
 _prio = {"index.html": "1.0", "services.html": "0.9", "case-studies.html": "0.9",
          "about.html": "0.8", "contact.html": "0.8", "privacy.html": "0.3"}
+_prio.update({_u: "0.8" for _u in CASE_URLS})
 _urls = ""
-for _f in PAGES:
+for _f in list(PAGES) + CASE_URLS:
     _loc = SITE + "/" + ("" if _f == "index.html" else _f)
     _urls += (f"  <url>\n    <loc>{_loc}</loc>\n    <lastmod>{_today}</lastmod>\n"
               f"    <changefreq>monthly</changefreq>\n    <priority>{_prio.get(_f,'0.5')}</priority>\n  </url>\n")
 open(f"{OUT}/sitemap.xml", "w").write(
     '<?xml version="1.0" encoding="UTF-8"?>\n'
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + _urls + "</urlset>\n")
-print("seo: robots.txt + sitemap.xml (" + str(len(PAGES)) + " urls)")
+print("seo: robots.txt + sitemap.xml (" + str(len(PAGES) + len(CASE_URLS)) + " urls)")
 print("css", os.path.getsize(f"{OUT}/css/site.css")//1024, "KB; js", os.path.getsize(f"{OUT}/js/main.js")//1024, "KB")

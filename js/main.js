@@ -526,3 +526,44 @@ var PTC_META_PIXEL_ID = '1589986489809939';
   if (get() === 'yes') firePageEvents();
   window.__ptcFirePageEvents = firePageEvents;
 }catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
+
+
+/* ===== case study chapter ===== */
+(function(){try{
+  var cs = document.getElementById('cs');
+  if (!cs || !window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+  var mm = gsap.matchMedia();
+
+  mm.add('(min-width:900px) and (prefers-reduced-motion: no-preference)', function(){
+    document.documentElement.classList.add('js-h');
+    var track = cs.querySelector('.cs-track');
+    var dist = function(){ return track.scrollWidth - window.innerWidth; };
+    var tl = gsap.timeline({scrollTrigger:{
+      trigger: cs, start:'top top', end:function(){ return '+=' + dist(); },
+      scrub:1, pin:true, anticipatePin:1, invalidateOnRefresh:true,
+      onUpdate:function(self){ gsap.set('#cs .cs-prog',{scaleX:self.progress}); }
+    }});
+    tl.to([track,'#cs .cs-grad'],{x:function(){ return -dist(); }, ease:'none', duration:4},0)
+      .fromTo('#cs .cs-sun',{x:'14vw',y:'10vh',rotation:0},{x:'60vw',y:'74vh',rotation:150,ease:'none',duration:2.7},0)
+      .to('#cs .cs-sun',{autoAlpha:0,duration:.3},2.6)
+      .fromTo('#cs .cs-moon',{x:'72vw',y:'120vh'},{x:'74vw',y:'12vh',ease:'power1.out',duration:1.1},2.8);
+    gsap.utils.toArray(cs.querySelectorAll('[data-sp]')).forEach(function(el){
+      var sp = parseFloat(el.getAttribute('data-sp')) || 1;
+      var panel = el.closest('.cs-panel');
+      var i = gsap.utils.toArray(cs.querySelectorAll('.cs-panel')).indexOf(panel);
+      var n = cs.querySelectorAll('.cs-panel').length;
+      var start = Math.max(0, (i - 1) * (4 / n)), dur = Math.min(4 - start, 2 * (4 / n) + .6);
+      var d = 70 * (sp - 1) + 34 * sp;
+      tl.fromTo(el, {x:d}, {x:-d, ease:'none', duration:dur}, start);
+    });
+    return function(){ document.documentElement.classList.remove('js-h'); };
+  });
+
+  mm.add('(max-width:899px), (prefers-reduced-motion: reduce)', function(){
+    gsap.utils.toArray(cs.querySelectorAll('.cs-inner')).forEach(function(el){
+      gsap.from(el, {y:46, autoAlpha:0, duration:.8, ease:'power3.out',
+        scrollTrigger:{trigger:el, start:'top 88%'}});
+    });
+  });
+}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
