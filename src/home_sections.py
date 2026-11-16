@@ -103,7 +103,8 @@ HOME_CSS = """
 #ptc-main .stat::before,#ptc-main .stat::after{content:'';position:absolute;top:8px;bottom:8px;width:10px;border-radius:2px;background:repeating-linear-gradient(180deg,transparent 0 9px,rgba(10,20,20,.95) 9px 17px);}
 #ptc-main .stat::before{left:8px;}
 #ptc-main .stat::after{right:8px;}
-#ptc-main .odo{display:inline-flex;overflow:hidden;}
+#ptc-main .odo{display:inline-flex!important;overflow:hidden;font-size:inherit!important;letter-spacing:normal!important;text-transform:none!important;margin:0!important;}
+#ptc-main .odo .od,#ptc-main .odo .od-s{font-size:inherit!important;letter-spacing:normal!important;text-transform:none!important;margin:0!important;color:inherit!important;}
 #ptc-main .od{display:inline-block;height:1em;overflow:hidden;}
 #ptc-main .od-s{display:block;will-change:transform;}
 #ptc-main .od-s i{display:block;font-style:normal;height:1em;line-height:1;}
@@ -217,7 +218,13 @@ HOME_JS = """
     el.classList.add('odo');
     el.innerHTML=digits.map(function(){return '<span class="od"><span class="od-s">'+col+'</span></span>';}).join('');
     var strips=el.querySelectorAll('.od-s');
-    strips.forEach(function(st,i){ st.style.transform='translateY(-'+((+digits[i])*10)+'%)'; }); /* correct number by default */
+    /* resting state = the correct number. One system owns the transform: gsap if present,
+       plain CSS otherwise — never both, or the two offsets compose and show wrong digits. */
+    strips.forEach(function(st,i){
+      var d=(+digits[i])*10;
+      if(window.gsap){ gsap.set(st,{yPercent:-d}); }
+      else { st.style.transform='translateY(-'+d+'%)'; }
+    });
     items.push({el:el,strips:strips,digits:digits});
   });
   if(!('IntersectionObserver' in window)) return;

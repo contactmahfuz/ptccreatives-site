@@ -345,7 +345,13 @@
     el.classList.add('odo');
     el.innerHTML=digits.map(function(){return '<span class="od"><span class="od-s">'+col+'</span></span>';}).join('');
     var strips=el.querySelectorAll('.od-s');
-    strips.forEach(function(st,i){ st.style.transform='translateY(-'+((+digits[i])*10)+'%)'; }); /* correct number by default */
+    /* resting state = the correct number. One system owns the transform: gsap if present,
+       plain CSS otherwise — never both, or the two offsets compose and show wrong digits. */
+    strips.forEach(function(st,i){
+      var d=(+digits[i])*10;
+      if(window.gsap){ gsap.set(st,{yPercent:-d}); }
+      else { st.style.transform='translateY(-'+d+'%)'; }
+    });
     items.push({el:el,strips:strips,digits:digits});
   });
   if(!('IntersectionObserver' in window)) return;

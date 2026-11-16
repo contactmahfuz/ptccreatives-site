@@ -581,12 +581,19 @@ CASES = [
     ("360° Campaign","m-fish2","AvoidRafa Launch","Concert &amp; Album",
      "A full-funnel launch campaign for a concert and album drop — content strategy, influencer activations and release-day push."),
 ]
+# EDIT: add a URL as a 6th item to make a card clickable; until then it renders
+# as a non-link so it can't dead-jump to the top of the page.
 cards = ""
-for tag, m, title, client, desc in CASES:
-    cards += f"""      <a class="card ptc-reveal" href="#"><!-- EDIT: link to video / case study -->
+for _c in CASES:
+    tag, m, title, client, desc = _c[:5]
+    url = _c[5] if len(_c) > 5 else None
+    _o = f'<a class="card ptc-reveal" href="{url}" target="_blank" rel="noopener">' if url else '<div class="card ptc-reveal">'
+    _c2 = "</a>" if url else "</div>"
+    _go = '<span class="card-go">View Case Study &rarr;</span>' if url else ""
+    cards += f"""      {_o}
         <div class="card-top"><span class="tag">{tag}</span><span class="m {m}"></span></div>
-        <div class="card-body"><h3>{title}</h3><p class="client">{client}</p><p>{desc}</p></div>
-      </a>\n"""
+        <div class="card-body"><h3>{title}</h3><p class="client">{client}</p><p>{desc}</p>{_go}</div>
+      {_c2}\n"""
 
 BODY_CASES = f"""<div id="ptc-main">
   <section class="band dots pg-day">
