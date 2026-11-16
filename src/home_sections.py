@@ -6,7 +6,7 @@ IX_ROWS = [
     ("01", "Video Production",  "Films, documentaries, podcasts & music videos, crafted in-house.", "img/sun.webp"),
     ("02", "Event Management and Coverage", "Concept to coverage, on the ground and on camera.",     "img/peacock.webp"),
     ("03", "Content Strategy",  "A roadmap for what to say, where, and how often.",                  "img/fish1.webp"),
-    ("04", "Branding, Design &amp; Merchandising", "Identities and visuals, on screen and on paper.", "img/lotus.webp"),
+    ("04", "Branding, Design &amp; Merchandising", "Identity, collateral and merchandise that carry the brand.", "img/lotus.webp"),
     ("05", "Social Media Management", "Calendars, captions and growth that compounds.",              "img/fish2.webp"),
     ("06", "Web Presence",      "Websites and landing pages built to convert.",                      "img/ribbon.webp"),
     ("07", "PR &amp; Activation", "Press, partnerships and live activations that get you noticed.",    "img/figure.webp"),
