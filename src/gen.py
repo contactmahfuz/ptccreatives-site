@@ -273,7 +273,11 @@ body{margin:0;background:#101f1f;}
 #ptc-main .ptc-form textarea{min-height:150px;resize:vertical;}
 #ptc-main .ptc-form button{background:none;border:1px solid #179c97;color:#fff;padding:14px 32px;font:400 13px 'Poppins',sans-serif;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s;}
 #ptc-main .ptc-form button:hover{background:#179c97;color:#101f1f;}
-#ptc-main .fmsg{display:none;margin-top:16px;color:#e8a317;font-weight:300;font-size:14px;}
+#ptc-main .fmsg{display:none;margin-top:16px;font-weight:300;font-size:15px;line-height:1.6;}
+#ptc-main .fmsg.ok{color:#2fc3bd;}
+#ptc-main .fmsg.err{color:#ff8a6a;}
+#ptc-main .ptc-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;}
+#ptc-main .ptc-form button[disabled]{opacity:.6;cursor:default;}
 @media (max-width:900px){#ptc-main .c-grid{grid-template-columns:1fr;}#ptc-main .ptc-form .frow{grid-template-columns:1fr;}}
 /* ===== legal / privacy ===== */
 #ptc-main .legal{max-width:760px;}
@@ -378,11 +382,30 @@ EXTRA_JS = """
   }
   var f=document.querySelector('.ptc-form');
   if(f) f.addEventListener('submit',function(e){
-    if(f.getAttribute('action').indexOf('YOUR_FORM_ID')>-1){
-      e.preventDefault();
-      var m=f.querySelector('.fmsg');
-      if(m){m.textContent='The form is not connected yet. Please use the email or phone number above.';m.style.display='block';}
-    }
+    e.preventDefault();
+    var msg=f.querySelector('.fmsg'), btn=f.querySelector('button[type=submit]');
+    var hp=f.querySelector('[name=_hp]');
+    function say(text,kind){ if(!msg) return; msg.textContent=text; msg.className='fmsg '+kind; msg.style.display='block'; }
+    if(hp && hp.value){ say('Thanks, your message has been sent.','ok'); f.reset(); return; } /* bot */
+    var data={};
+    new FormData(f).forEach(function(v,k){ if(k!=='_hp') data[k]=v; });
+    var label=btn?btn.textContent:'';
+    if(btn){ btn.disabled=true; btn.textContent='Sending...'; }
+    say('','');
+    fetch(f.getAttribute('action'),{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(data)
+    }).then(function(r){
+      if(!r.ok) throw new Error('status '+r.status);
+      f.reset();
+      say('Thank you. Your message is on its way, we will reply shortly.','ok');
+      if(window.ptcTrackLead) window.ptcTrackLead();   /* only on a confirmed send */
+    }).catch(function(){
+      say('Something went wrong sending that. Please email contact@ptccreatives.com or call +880 1762 206983.','err');
+    }).then(function(){
+      if(btn){ btn.disabled=false; btn.textContent=label||'Send Message'; }
+    });
   });
   var y=document.getElementById('ptc-year'); if(y) y.textContent=new Date().getFullYear();
   /* featured film: click/enter swaps the poster for the YouTube embed */
@@ -774,13 +797,13 @@ BODY_CONTACT = f"""<div id="ptc-main">
       <div class="c-card ptc-reveal"><h3>Email</h3><a href="mailto:contact@ptccreatives.com">contact@ptccreatives.com</a></div>
       <div class="c-card ptc-reveal"><h3>Visit</h3><p>H-1263, Road 10, Avenue 2,<br>Mirpur DOHS, Dhaka-1216, Bangladesh</p></div>
     </div>
-    <!-- EDIT: create a free form at formspree.io and replace YOUR_FORM_ID -->
-    <form class="ptc-form ptc-reveal" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    <form class="ptc-form ptc-reveal" action="https://submit-form.com/sxPAOlY7L" method="POST">
       <div class="frow">
         <input type="text" name="name" placeholder="Your name" required>
         <input type="email" name="email" placeholder="Your email" required>
       </div>
       <input type="text" name="company" placeholder="Company (optional)">
+      <input class="hp" type="text" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <textarea name="message" placeholder="What are you trying to say?" required></textarea>
       <button type="submit">Send Message</button>
       <p class="fmsg"></p>

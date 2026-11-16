@@ -179,7 +179,11 @@ body{margin:0;background:#101f1f;}
 #ptc-main .ptc-form textarea{min-height:150px;resize:vertical;}
 #ptc-main .ptc-form button{background:none;border:1px solid #179c97;color:#fff;padding:14px 32px;font:400 13px 'Poppins',sans-serif;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s;}
 #ptc-main .ptc-form button:hover{background:#179c97;color:#101f1f;}
-#ptc-main .fmsg{display:none;margin-top:16px;color:#e8a317;font-weight:300;font-size:14px;}
+#ptc-main .fmsg{display:none;margin-top:16px;font-weight:300;font-size:15px;line-height:1.6;}
+#ptc-main .fmsg.ok{color:#2fc3bd;}
+#ptc-main .fmsg.err{color:#ff8a6a;}
+#ptc-main .ptc-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;}
+#ptc-main .ptc-form button[disabled]{opacity:.6;cursor:default;}
 @media (max-width:900px){#ptc-main .c-grid{grid-template-columns:1fr;}#ptc-main .ptc-form .frow{grid-template-columns:1fr;}}
 /* ===== legal / privacy ===== */
 #ptc-main .legal{max-width:760px;}

@@ -82,11 +82,30 @@
   }
   var f=document.querySelector('.ptc-form');
   if(f) f.addEventListener('submit',function(e){
-    if(f.getAttribute('action').indexOf('YOUR_FORM_ID')>-1){
-      e.preventDefault();
-      var m=f.querySelector('.fmsg');
-      if(m){m.textContent='The form is not connected yet. Please use the email or phone number above.';m.style.display='block';}
-    }
+    e.preventDefault();
+    var msg=f.querySelector('.fmsg'), btn=f.querySelector('button[type=submit]');
+    var hp=f.querySelector('[name=_hp]');
+    function say(text,kind){ if(!msg) return; msg.textContent=text; msg.className='fmsg '+kind; msg.style.display='block'; }
+    if(hp && hp.value){ say('Thanks, your message has been sent.','ok'); f.reset(); return; } /* bot */
+    var data={};
+    new FormData(f).forEach(function(v,k){ if(k!=='_hp') data[k]=v; });
+    var label=btn?btn.textContent:'';
+    if(btn){ btn.disabled=true; btn.textContent='Sending...'; }
+    say('','');
+    fetch(f.getAttribute('action'),{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(data)
+    }).then(function(r){
+      if(!r.ok) throw new Error('status '+r.status);
+      f.reset();
+      say('Thank you. Your message is on its way, we will reply shortly.','ok');
+      if(window.ptcTrackLead) window.ptcTrackLead();   /* only on a confirmed send */
+    }).catch(function(){
+      say('Something went wrong sending that. Please email contact@ptccreatives.com or call +880 1762 206983.','err');
+    }).then(function(){
+      if(btn){ btn.disabled=false; btn.textContent=label||'Send Message'; }
+    });
   });
   var y=document.getElementById('ptc-year'); if(y) y.textContent=new Date().getFullYear();
   /* featured film: click/enter swaps the poster for the YouTube embed */
@@ -428,9 +447,8 @@ var PTC_META_PIXEL_ID = '1589986489809939';
     b.addEventListener('click', function(ev){ ev.preventDefault(); if (el) el.hidden = false; });
   });
 
-  /* fire a Lead event when the contact form is submitted, if consent was given */
-  var f = document.querySelector('.ptc-form');
-  if (f) f.addEventListener('submit', function(){
+  /* the form calls this only after a message actually sends, so Lead reflects real enquiries */
+  window.ptcTrackLead = function(){
     if (get() === 'yes' && window.fbq) window.fbq('track', 'Lead');
-  });
+  };
 }catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();

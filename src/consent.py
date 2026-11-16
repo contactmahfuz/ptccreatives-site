@@ -89,10 +89,9 @@ var PTC_META_PIXEL_ID = '1589986489809939';
     b.addEventListener('click', function(ev){ ev.preventDefault(); if (el) el.hidden = false; });
   });
 
-  /* fire a Lead event when the contact form is submitted, if consent was given */
-  var f = document.querySelector('.ptc-form');
-  if (f) f.addEventListener('submit', function(){
+  /* the form calls this only after a message actually sends, so Lead reflects real enquiries */
+  window.ptcTrackLead = function(){
     if (get() === 'yes' && window.fbq) window.fbq('track', 'Lead');
-  });
+  };
 })();
 """
