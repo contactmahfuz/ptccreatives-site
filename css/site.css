@@ -323,14 +323,19 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
   html.js-h .ps-pin{height:100vh;}
   html.js-h .ps-track{display:flex;width:500vw;height:100vh;}
   html.js-h .ps-panel{width:100vw;height:100vh;min-height:0;flex:0 0 auto;padding:0 7vw;}
-  html.js-h .ps-p1{background:linear-gradient(90deg,#f4e9d2 72%,#eed8ac 100%);}
-  html.js-h .ps-p2{background:linear-gradient(90deg,#eed8ac 0%,#d99a4e 72%,#c0693a 100%);}
-  html.js-h .ps-p3{background:linear-gradient(90deg,#c0693a 0%,#7e3528 55%,#38222e 100%);}
-  html.js-h .ps-p4{background:linear-gradient(90deg,#38222e 0%,#122028 60%,#0d1a20 100%);}
-  html.js-h .ps-p5{background:linear-gradient(90deg,#0d1a20 0%,#0a1414 100%);}
-  html.js-h .ps-sky{display:block;position:absolute;inset:0;z-index:1;pointer-events:none;}
-  html.js-h .ps-sun{position:absolute;left:0;top:0;width:200px;will-change:transform;}
-  html.js-h .ps-moon{position:absolute;left:0;top:0;width:110px;transform:translate(70vw,120vh);
+  /* sky holds the gradient strip + sun; the track rides above it so text is never covered */
+  html.js-h .ps-panel{background:transparent;}
+  html.js-h .ps-track{position:relative;z-index:2;}
+  html.js-h .ps-sky{display:block;position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  html.js-h .ps-grad{position:absolute;top:0;left:0;height:100%;width:500vw;display:flex;z-index:0;will-change:transform;}
+  html.js-h .ps-grad span{flex:0 0 100vw;height:100%;}
+  html.js-h .ps-grad span:nth-child(1){background:linear-gradient(90deg,#f4e9d2 72%,#eed8ac 100%);}
+  html.js-h .ps-grad span:nth-child(2){background:linear-gradient(90deg,#eed8ac 0%,#d99a4e 72%,#c0693a 100%);}
+  html.js-h .ps-grad span:nth-child(3){background:linear-gradient(90deg,#c0693a 0%,#7e3528 55%,#38222e 100%);}
+  html.js-h .ps-grad span:nth-child(4){background:linear-gradient(90deg,#38222e 0%,#122028 60%,#0d1a20 100%);}
+  html.js-h .ps-grad span:nth-child(5){background:linear-gradient(90deg,#0d1a20 0%,#0a1414 100%);}
+  html.js-h .ps-sun{position:absolute;left:0;top:0;width:200px;z-index:1;will-change:transform;}
+  html.js-h .ps-moon{position:absolute;left:0;top:0;width:110px;z-index:1;transform:translate(70vw,120vh);
     filter:drop-shadow(0 0 26px rgba(244,233,210,.35));will-change:transform;}
   html.js-h .ps-rail{display:block;position:absolute;left:0;right:0;bottom:0;height:58px;z-index:4;
     border-top:1px solid rgba(244,233,210,.25);

@@ -48,6 +48,7 @@ SEC_PATA = f"""
   <section id="pata" class="ps" aria-label="Our story">
     <div class="ps-pin">
       <div class="ps-sky" aria-hidden="true">
+        <div class="ps-grad"><span></span><span></span><span></span><span></span><span></span></div>
         <img class="ps-sun" src="img/sun.webp" alt="">
         <svg class="ps-moon" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="44" fill="#f4e9d2"/><circle cx="46" cy="48" r="7" fill="#d9cbae"/><circle cx="72" cy="70" r="5" fill="#d9cbae"/><circle cx="62" cy="38" r="4" fill="#d9cbae"/></svg>
       </div>
@@ -182,14 +183,19 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
   html.js-h .ps-pin{height:100vh;}
   html.js-h .ps-track{display:flex;width:500vw;height:100vh;}
   html.js-h .ps-panel{width:100vw;height:100vh;min-height:0;flex:0 0 auto;padding:0 7vw;}
-  html.js-h .ps-p1{background:linear-gradient(90deg,#f4e9d2 72%,#eed8ac 100%);}
-  html.js-h .ps-p2{background:linear-gradient(90deg,#eed8ac 0%,#d99a4e 72%,#c0693a 100%);}
-  html.js-h .ps-p3{background:linear-gradient(90deg,#c0693a 0%,#7e3528 55%,#38222e 100%);}
-  html.js-h .ps-p4{background:linear-gradient(90deg,#38222e 0%,#122028 60%,#0d1a20 100%);}
-  html.js-h .ps-p5{background:linear-gradient(90deg,#0d1a20 0%,#0a1414 100%);}
-  html.js-h .ps-sky{display:block;position:absolute;inset:0;z-index:1;pointer-events:none;}
-  html.js-h .ps-sun{position:absolute;left:0;top:0;width:200px;will-change:transform;}
-  html.js-h .ps-moon{position:absolute;left:0;top:0;width:110px;transform:translate(70vw,120vh);
+  /* sky holds the gradient strip + sun; the track rides above it so text is never covered */
+  html.js-h .ps-panel{background:transparent;}
+  html.js-h .ps-track{position:relative;z-index:2;}
+  html.js-h .ps-sky{display:block;position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  html.js-h .ps-grad{position:absolute;top:0;left:0;height:100%;width:500vw;display:flex;z-index:0;will-change:transform;}
+  html.js-h .ps-grad span{flex:0 0 100vw;height:100%;}
+  html.js-h .ps-grad span:nth-child(1){background:linear-gradient(90deg,#f4e9d2 72%,#eed8ac 100%);}
+  html.js-h .ps-grad span:nth-child(2){background:linear-gradient(90deg,#eed8ac 0%,#d99a4e 72%,#c0693a 100%);}
+  html.js-h .ps-grad span:nth-child(3){background:linear-gradient(90deg,#c0693a 0%,#7e3528 55%,#38222e 100%);}
+  html.js-h .ps-grad span:nth-child(4){background:linear-gradient(90deg,#38222e 0%,#122028 60%,#0d1a20 100%);}
+  html.js-h .ps-grad span:nth-child(5){background:linear-gradient(90deg,#0d1a20 0%,#0a1414 100%);}
+  html.js-h .ps-sun{position:absolute;left:0;top:0;width:200px;z-index:1;will-change:transform;}
+  html.js-h .ps-moon{position:absolute;left:0;top:0;width:110px;z-index:1;transform:translate(70vw,120vh);
     filter:drop-shadow(0 0 26px rgba(244,233,210,.35));will-change:transform;}
   html.js-h .ps-rail{display:block;position:absolute;left:0;right:0;bottom:0;height:58px;z-index:4;
     border-top:1px solid rgba(244,233,210,.25);
@@ -306,7 +312,7 @@ PATA_JS = """
       scrub:1, pin:true, anticipatePin:1, invalidateOnRefresh:true,
       snap:{snapTo:[0,.25,.5,.75,1], duration:{min:.2,max:.6}, ease:'power1.inOut'}
     }});
-    tl.to(track,{x:function(){ return -dist(); }, ease:'none', duration:4},0);
+    tl.to([track,'.ps-grad'],{x:function(){ return -dist(); }, ease:'none', duration:4},0);
     /* sun sets across the day panels, moon rises over the night ones */
     tl.fromTo('.ps-sun',{x:'12vw',y:'8vh',rotation:0},{x:'58vw',y:'76vh',rotation:160,ease:'none',duration:2.6},0)
       .to('.ps-sun',{autoAlpha:0,duration:.3},2.5)
