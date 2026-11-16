@@ -161,7 +161,7 @@
   var pats = tiles.map(function(t){ return cx.createPattern(t, 'repeat'); });
   var W = 0, H = 0;
   function size(){
-    var s = window.innerWidth < 900 ? 1.6 : 1.4;           // grain size in CSS px
+    var s = window.innerWidth < 900 ? 2 : 1.4;           // grain size in CSS px
     W = Math.ceil(window.innerWidth / s); H = Math.ceil(window.innerHeight / s);
     cv.width = W; cv.height = H;
     draw();

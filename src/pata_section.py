@@ -132,9 +132,9 @@ PATA_CSS = """
 .vig{position:fixed;inset:0;z-index:199;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 58%,rgba(5,10,10,.42) 100%);}
 @media (max-width:900px){.grain{opacity:.11;}}
 @media (prefers-reduced-motion:reduce){.grain{animation:none;}}
-.grain.live{inset:0;animation:none;background:none;mix-blend-mode:normal;opacity:.12;}
+.grain.live{inset:0;animation:none;background:none;mix-blend-mode:normal;opacity:.14;}
 .grain.live canvas{display:block;width:100%;height:100%;}
-@media (max-width:900px){.grain.live{opacity:.09;}}
+@media (max-width:900px){.grain.live{opacity:.16;}}
 
 
 /* ============ iris preloader ============ */
@@ -240,7 +240,7 @@ PATA_JS = """
   var pats = tiles.map(function(t){ return cx.createPattern(t, 'repeat'); });
   var W = 0, H = 0;
   function size(){
-    var s = window.innerWidth < 900 ? 1.6 : 1.4;           // grain size in CSS px
+    var s = window.innerWidth < 900 ? 2 : 1.4;           // grain size in CSS px
     W = Math.ceil(window.innerWidth / s); H = Math.ceil(window.innerHeight / s);
     cv.width = W; cv.height = H;
     draw();
