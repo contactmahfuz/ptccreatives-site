@@ -53,7 +53,7 @@ CONSENT_JS = """
    EDIT: paste your Meta Pixel ID between the quotes to switch tracking on.
    Find it at facebook.com/events_manager -> Data Sources -> your pixel (a ~15-digit number).
    Leave it empty and nothing loads and no banner is shown. */
-var PTC_META_PIXEL_ID = '';
+var PTC_META_PIXEL_ID = '1589986489809939';
 
 (function(){
   var KEY = 'ptc-consent';
