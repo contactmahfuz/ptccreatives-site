@@ -128,10 +128,22 @@ sect_body = sect_body.replace('href="#">Contact Us', 'href="contact.html">Contac
 sect_body = sect_body.replace('<a class="card ptc-reveal" href="#">',
                               '<a class="card ptc-reveal" href="case-studies.html">')
 # --- clients: smooth-scrolling two-row marquee (text now; swap spans for <img> when logo files arrive) ---
-CLIENTS = ["Munzer","Industry Insider","Eventshark.io","Young Founders School","YGEN Engineering Ltd","Wagely",
-           "Volt Mills Energy","Sonar Bangla Foundation","Airwork","ORCA","Omnicare","Kaler Kontho",
-           "Old Faujians Association","Samuda Chemical Complex Limited","Jute Alliance Limited","Samuda Construction Limited","Feni Girls Cadet College","The Paper Boutique","Shomokal","Fiber@Home",
-           "Terre Armee","Edventure","Felicity IDC","Barishal Ex Cadets Association","The Bangladesh Dialogue"]
+CLIENTS = [
+    "YGEN Engineering Ltd", "Shonar Bangla Foundation", "United Securities Limited",
+    "Fiber at Home", "OFA", "Felicity IDC",
+    "Airwrk", "Vendy", "ORCA",
+    "Munzer Bangladesh Pvt", "Samuda Chemical Complex Ltd", "Japanese Cars & Motorcycles",
+    "Samuda Construction Ltd", "Edventure", "Terre Armee",
+    "Volt Mills Energy Ltd", "Wagely", "Helmsman Consulting Ltd",
+    "Ex Cadets Forum", "Rock Rankers Ltd", "BEXCA",
+    "The Paper Boutique", "Hasan International", "Banglay Likhi",
+    "Finesse Nutrition", "Omnicare Diagnostic Limited", "Industry Insider",
+    "Jute Alliance Bangladesh", "Shomokal", "Feni Girls Cadet College",
+    "Kaler Kontho", "Eventshark", "Krishnopokkho",
+    "Young Founders School", "Joyeeta", "Fiverr",
+    "Barishal Cadet College", "The Bangladesh Dialogue", "Bioenclave",
+    "Chords", "On Record", "WeGro",
+]
 def mq_row(names, rev=False):
     items = "".join(f"<span>{n}</span>" for n in names)
     return f'<div class="mq-track{" rev" if rev else ""}">{items}{items}</div>'
@@ -663,32 +675,37 @@ BODY_SERVICES = f"""<div id="ptc-main">
 """
 
 CASES = [
-    ("Documentary","m-lotus","Chronicles of July","Documentary Film",
-     "A feature documentary on the July Revolution of Bangladesh: research, scripting and production through to a premiere screening."),
-    ("Campaign","m-fish1","Investor Education Series","WeGro",
-     "A six-film series for the agri-fintech platform WeGro, turning investment concepts into plain-language stories for first-time investors."),
-    ("Podcast","m-fish2","CounterNarrative S2","The Bangladesh Dialogue",
-     "Complete audio-visual branding for season two of a national policy podcast: identity, intro package and episode templates."),
-    ("Corporate AV","m-fish1","PHC Pile Process Films","Samuda Construction",
-     "Narrated AV films that turn heavy manufacturing into a clear, confident story for clients and partners."),
-    ("OVC","m-lotus","Reclaiming Lost Shares","United Securities Ltd.",
-     "An emotive online video commercial helping families discover and recover shares they never knew they owned."),
-    ("360° Campaign","m-fish2","AvoidRafa Launch","Concert &amp; Album",
-     "A full-funnel launch campaign for a concert and album drop: content strategy, influencer activations and release-day push."),
+    ("Event Management","Future of Capitalism","IBACC",
+     "A startup competition where every logistic ran through our team, from the stage and set design to execution on the day."),
+    ("Documentary","Chronicles of Freedom","The Bangladesh Dialogue",
+     "A documentary preserving the history of the July Revolution, carried end to end in-house, from the shoots to the screening."),
+    ("Event Management","Future Bangladesh Challenge","The Bangladesh Dialogue",
+     "A national case competition finale built to surface policy from the root level, with the stage set and run by us from planning to the closing minute."),
+    ("Corporate Film","PHC Pile Process Films","Samuda Construction Ltd",
+     "Narrated films that turn heavy manufacturing into a clear, confident story for clients and partners."),
+    ("Podcast","On Record with Saif Rubab","On Record",
+     "A long-form interview series produced and branded with us, from studio setup through to post."),
+    ("Institutional Film","Feni Girls' Cadet College","FGCC",
+     "An institutional film capturing the character of one of the country's cadet colleges."),
+    ("Design","Brand Merchandising","WeGro, United Securities, Momentum",
+     "Identity applied across merchandise, print and collateral: totes, notebooks, profiles and packaging."),
+    ("Event Coverage","Almost Friday","Chords",
+     "Live music coverage, photography and video, capturing the room as it happened."),
 ]
-# EDIT: add a URL as a 6th item to make a card clickable; until then it renders
-# as a non-link so it can't dead-jump to the top of the page.
+# EDIT: add a URL as a 5th item in CASES to make a card clickable; until then it
+# renders as a non-link so it cannot dead-jump to the top of the page.
+_MOTIF = ["m-lotus","m-fish1","m-fish2"]
 cards = ""
-for _c in CASES:
-    tag, m, title, client, desc = _c[:5]
-    url = _c[5] if len(_c) > 5 else None
+for _i, _c in enumerate(CASES):
+    tag, title, client, desc = _c[:4]
+    url = _c[4] if len(_c) > 4 else None
     _o = f'<a class="card ptc-reveal" href="{url}" target="_blank" rel="noopener">' if url else '<div class="card ptc-reveal">'
-    _c2 = "</a>" if url else "</div>"
-    _go = '<span class="card-go">View Case Study &rarr;</span>' if url else ""
+    _end = "</a>" if url else "</div>"
+    _go = '<span class="card-go">Watch &rarr;</span>' if url else ""
     cards += f"""      {_o}
-        <div class="card-top"><span class="tag">{tag}</span><span class="m {m}"></span></div>
+        <div class="card-top"><span class="tag">{tag}</span><span class="card-n">{_i+1:02d}</span><span class="m {_MOTIF[_i%3]}"></span></div>
         <div class="card-body"><h3>{title}</h3><p class="client">{client}</p><p>{desc}</p>{_go}</div>
-      {_c2}\n"""
+      {_end}\n"""
 
 BODY_CASES = f"""<div id="ptc-main">
   <section class="band dots pg-day">
@@ -701,7 +718,7 @@ BODY_CASES = f"""<div id="ptc-main">
   <section class="dots pg-grad-case" id="work" style="padding-top:30px;">
     <div class="work-grid">
 {cards}    </div>
-    <p class="note ptc-reveal">Draft entries. Titles, clients and links to be finalised.</p>
+    <p class="note ptc-reveal">Selected work. Send us a note to see the full reel.</p>
   </section>
   {SEC_CTA}
 </div>
