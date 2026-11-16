@@ -11,7 +11,7 @@
 #ptc-hero .ptc-stage img{position:absolute;display:block;height:auto;}
 #ptc-hero .lyr-sun{left:650px;top:90px;width:420px;z-index:2;}
 #ptc-hero .ptc-figure{left:920px;top:155px;width:380px;z-index:3;}
-#ptc-hero .ptc-ribbon{left:420px;top:290px;width:880px;z-index:4;}
+#ptc-hero .ptc-ribbon{left:420px;top:290px;width:880px;z-index:1;}
 #ptc-hero .ptc-motif{z-index:5;}
 #ptc-hero .lyr-lotus{left:442px;top:420px;width:112px;}
 #ptc-hero .lyr-fish1{left:760px;top:575px;width:140px;}
