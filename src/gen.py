@@ -720,19 +720,32 @@ CASES = [
      "Live music coverage, photography and video, capturing the room as it happened."),
 ]
 # EDIT: add a URL as a 6th item in CASES to make a card clickable.
-cards = ""
-for _i, _c in enumerate(CASES):
-    img, tag, title, client, desc = _c[:5]
-    _slug = {c["title"]: c["slug"] for c in CASE_STUDIES}.get(title)
-    url = ("work/" + _slug + "/") if _slug else (_c[5] if len(_c) > 5 else None)
-    _o = f'<a class="card ptc-reveal" href="{url}">' if url else '<div class="card ptc-reveal">'
-    _end = "</a>" if url else "</div>"
-    _go = '<span class="card-go">View Case Study &rarr;</span>' if url else ""
-    cards += f"""      {_o}
+def work_cards(fallback=None):
+    """Every project as a card. fallback = href for projects without a case
+    study page yet, so a card is never a dead end."""
+    out = ""
+    for _i, _c in enumerate(CASES):
+        img, tag, title, client, desc = _c[:5]
+        _slug = {c["title"]: c["slug"] for c in CASE_STUDIES}.get(title)
+        url = ("work/" + _slug + "/") if _slug else (_c[5] if len(_c) > 5 else fallback)
+        _o = f'<a class="card ptc-reveal" href="{url}">' if url else '<div class="card ptc-reveal">'
+        _end = "</a>" if url else "</div>"
+        _go = '<span class="card-go">View Case Study &rarr;</span>' if url else ""
+        out += f"""      {_o}
         <div class="card-top"><img src="img/work/{img}.webp" alt="{title}" loading="lazy">
           <span class="tag">{tag}</span><span class="card-n">{_i+1:02d}</span></div>
         <div class="card-body"><h3>{title}</h3><p class="client">{client}</p><p>{desc}</p>{_go}</div>
       {_end}\n"""
+    return out
+
+cards = work_cards()
+
+import re as _re
+_home_grid = '<div class="work-grid" data-rotate="6" data-rotate-mobile="3">\n' + work_cards("case-studies.html") + '    '
+BODY_INDEX, _n = _re.subn(
+    r'<div class="work-grid">.*?(?=</div>\s*\n\s*<p class="note ptc-reveal">A selection\.)',
+    lambda m: _home_grid, BODY_INDEX, flags=_re.S)
+assert _n == 1, f"homepage work grid: {_n} matches"
 
 BODY_CASES = f"""<div id="ptc-main">
   <section class="band dots pg-day">

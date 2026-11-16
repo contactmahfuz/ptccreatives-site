@@ -142,6 +142,16 @@ HOME_CSS = """
 #ptc-main .card h3{font-size:21px;}
 #ptc-main .card-go{display:inline-block;margin-top:16px;font-size:11.5px;font-weight:400;letter-spacing:.24em;text-transform:uppercase;color:#179c97;opacity:0;transform:translateX(-10px);transition:opacity .35s,transform .35s;}
 #ptc-main .card:hover .card-go{opacity:1;transform:none;}
+@media (max-width:620px){
+  /* two cards per row leaves little width: shrink the counter so three digits
+     and the sup sit between the sprocket strips instead of running over them */
+  #ptc-main .stat{padding:30px 22px 26px;}
+  #ptc-main .stat::before{left:6px;}
+  #ptc-main .stat::after{right:6px;}
+  #ptc-main .stat b{font-size:clamp(30px,11vw,50px);white-space:nowrap;}
+  #ptc-main .stat b sup{font-size:.48em;}
+  #ptc-main .stat > span{margin-top:10px;font-size:13px;letter-spacing:.12em;}
+}
 @media (max-width:900px){#ptc-main .work-grid{grid-template-columns:1fr;}#ptc-main .work-grid .card:nth-child(even){margin-top:0;}#ptc-main .card-n{font-size:70px;}}
 """
 
@@ -209,6 +219,38 @@ HOME_JS = """
       scrollTrigger:{trigger:g,start:'top bottom',end:'bottom top',scrub:1}});
   });
 })();
+/* selected work: show a random few of the projects, fresh on every visit.
+   Every project stays in the markup; the case studies page shows them all. */
+(function(){
+  var grid=document.querySelector('.work-grid[data-rotate]');
+  if(!grid) return;
+  var cards=[].slice.call(grid.children);
+  if(cards.length<2) return;
+  var wide=parseInt(grid.getAttribute('data-rotate'),10)||6;
+  var narrow=parseInt(grid.getAttribute('data-rotate-mobile'),10)||3;
+  var mq=window.matchMedia('(max-width:900px)');
+  function draw(){
+    var n=Math.min(mq.matches?narrow:wide,cards.length);
+    var bag=cards.slice();
+    for(var i=bag.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=bag[i];bag[i]=bag[j];bag[j]=t;}
+    var keep=bag.slice(0,n);
+    cards.forEach(function(c){c.style.display='none';});
+    var shown=0;
+    cards.forEach(function(c){
+      if(keep.indexOf(c)<0) return;
+      c.style.display='';
+      /* the staggered column needs the visible position, not the DOM one */
+      c.style.marginTop=(!mq.matches && shown%2===1)?'70px':'0px';
+      var num=c.querySelector('.card-n');
+      if(num) num.textContent=('0'+(shown+1)).slice(-2);
+      shown++;
+    });
+  }
+  draw();
+  if(mq.addEventListener) mq.addEventListener('change',draw);
+  else if(mq.addListener) mq.addListener(draw);
+})();
+
 /* stats: film-counter odometer (IntersectionObserver — no ScrollTrigger dependency) */
 (function(){
   var nums=document.querySelectorAll('.ptc-num');

@@ -354,6 +354,38 @@
       scrollTrigger:{trigger:g,start:'top bottom',end:'bottom top',scrub:1}});
   });
 }catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
+/* selected work: show a random few of the projects, fresh on every visit.
+   Every project stays in the markup; the case studies page shows them all. */
+(function(){try{
+  var grid=document.querySelector('.work-grid[data-rotate]');
+  if(!grid) return;
+  var cards=[].slice.call(grid.children);
+  if(cards.length<2) return;
+  var wide=parseInt(grid.getAttribute('data-rotate'),10)||6;
+  var narrow=parseInt(grid.getAttribute('data-rotate-mobile'),10)||3;
+  var mq=window.matchMedia('(max-width:900px)');
+  function draw(){
+    var n=Math.min(mq.matches?narrow:wide,cards.length);
+    var bag=cards.slice();
+    for(var i=bag.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=bag[i];bag[i]=bag[j];bag[j]=t;}
+    var keep=bag.slice(0,n);
+    cards.forEach(function(c){c.style.display='none';});
+    var shown=0;
+    cards.forEach(function(c){
+      if(keep.indexOf(c)<0) return;
+      c.style.display='';
+      /* the staggered column needs the visible position, not the DOM one */
+      c.style.marginTop=(!mq.matches && shown%2===1)?'70px':'0px';
+      var num=c.querySelector('.card-n');
+      if(num) num.textContent=('0'+(shown+1)).slice(-2);
+      shown++;
+    });
+  }
+  draw();
+  if(mq.addEventListener) mq.addEventListener('change',draw);
+  else if(mq.addListener) mq.addListener(draw);
+}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
+
 /* stats: film-counter odometer (IntersectionObserver — no ScrollTrigger dependency) */
 (function(){try{
   var nums=document.querySelectorAll('.ptc-num');

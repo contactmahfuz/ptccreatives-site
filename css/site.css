@@ -470,6 +470,16 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 #ptc-main .card h3{font-size:21px;}
 #ptc-main .card-go{display:inline-block;margin-top:16px;font-size:11.5px;font-weight:400;letter-spacing:.24em;text-transform:uppercase;color:#179c97;opacity:0;transform:translateX(-10px);transition:opacity .35s,transform .35s;}
 #ptc-main .card:hover .card-go{opacity:1;transform:none;}
+@media (max-width:620px){
+  /* two cards per row leaves little width: shrink the counter so three digits
+     and the sup sit between the sprocket strips instead of running over them */
+  #ptc-main .stat{padding:30px 22px 26px;}
+  #ptc-main .stat::before{left:6px;}
+  #ptc-main .stat::after{right:6px;}
+  #ptc-main .stat b{font-size:clamp(30px,11vw,50px);white-space:nowrap;}
+  #ptc-main .stat b sup{font-size:.48em;}
+  #ptc-main .stat > span{margin-top:10px;font-size:13px;letter-spacing:.12em;}
+}
 @media (max-width:900px){#ptc-main .work-grid{grid-template-columns:1fr;}#ptc-main .work-grid .card:nth-child(even){margin-top:0;}#ptc-main .card-n{font-size:70px;}}
 
 
