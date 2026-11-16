@@ -75,9 +75,9 @@ def apply_home(s):
 HOME_CSS = """
 /* ===== services index list ===== */
 #ptc-main .ix{margin-top:46px;border-top:1px solid rgba(255,255,255,.12);}
-#ptc-main .ix-row{position:relative;display:grid;grid-template-columns:64px 1fr auto 40px;align-items:center;gap:26px;padding:26px 8px;border-bottom:1px solid rgba(255,255,255,.12);text-decoration:none;transition:padding .35s,background .35s;}
+#ptc-main .ix-row{position:relative;display:grid;grid-template-columns:64px minmax(0,1fr) clamp(170px,16vw,230px) 40px;align-items:center;gap:26px;padding:26px 8px;border-bottom:1px solid rgba(255,255,255,.12);text-decoration:none;transition:padding .35s,background .35s;}
 #ptc-main .ix-num{font-weight:300;font-size:13px;letter-spacing:.3em;color:#e8a317;}
-#ptc-main .ix-name{font-weight:600;font-size:clamp(30px,4.4vw,64px);line-height:1.02;color:transparent;-webkit-text-stroke:1.2px rgba(255,255,255,.72);transition:color .35s;white-space:nowrap;}
+#ptc-main .ix-name{font-weight:600;font-size:clamp(28px,3vw,58px);line-height:1.02;color:transparent;-webkit-text-stroke:1.2px rgba(255,255,255,.72);transition:color .35s;white-space:nowrap;}
 #ptc-main .ix-row:hover .ix-name{color:#fff;-webkit-text-stroke-color:transparent;}
 #ptc-main .ix-row:hover{padding-left:22px;background:rgba(23,156,151,.06);}
 #ptc-main .ix-desc{font-weight:300;font-size:15px;line-height:1.6;color:rgba(255,255,255,.7);max-width:300px;text-align:right;opacity:0;transform:translateX(16px);transition:opacity .35s,transform .35s;}
@@ -86,6 +86,9 @@ HOME_CSS = """
 #ptc-main .ix-row:hover .ix-arrow{transform:translateX(7px);opacity:1;}
 .ix-float{position:fixed;left:0;top:0;z-index:120;width:150px;pointer-events:none;opacity:0;will-change:transform;}
 .ix-float img{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 32px rgba(0,0,0,.5));}
+/* narrow windows: the longest names stop fitting on one line beside the
+   description, so let them wrap rather than run over it */
+@media (min-width:701px) and (max-width:1200px){#ptc-main .ix-name{white-space:normal;}}
 @media (max-width:700px){
   #ptc-main .ix-row{grid-template-columns:40px 1fr 26px;gap:14px;}
   #ptc-main .ix-name{white-space:normal;font-size:26px;-webkit-text-stroke-width:1px;}
