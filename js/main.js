@@ -545,9 +545,12 @@ var PTC_META_PIXEL_ID = '1589986489809939';
       onUpdate:function(self){ gsap.set('#cs .cs-prog',{scaleX:self.progress}); }
     }});
     tl.to([track,'#cs .cs-grad'],{x:function(){ return -dist(); }, ease:'none', duration:4},0)
-      .fromTo('#cs .cs-sun',{x:'14vw',y:'10vh',rotation:0},{x:'60vw',y:'74vh',rotation:150,ease:'none',duration:2.7},0)
-      .to('#cs .cs-sun',{autoAlpha:0,duration:.3},2.6)
-      .fromTo('#cs .cs-moon',{x:'72vw',y:'120vh'},{x:'74vw',y:'12vh',ease:'power1.out',duration:1.1},2.8);
+      /* the moon sinks away, then the sun climbs: night into day */
+      .fromTo('#cs .cs-moon',{x:'16vw',y:'13vh',autoAlpha:1},{x:'44vw',y:'86vh',ease:'power1.in',duration:1.8},0)
+      .to('#cs .cs-moon',{autoAlpha:0,duration:.35},1.5)
+      .fromTo('#cs .cs-sun',{x:'52vw',y:'116vh',rotation:-140,autoAlpha:0},
+                            {x:'58vw',y:'72vh',rotation:-60,autoAlpha:1,ease:'none',duration:.6},1.5)
+      .to('#cs .cs-sun',{x:'74vw',y:'11vh',rotation:60,ease:'power2.out',duration:1.9},2.1);
     gsap.utils.toArray(cs.querySelectorAll('[data-sp]')).forEach(function(el){
       var sp = parseFloat(el.getAttribute('data-sp')) || 1;
       var panel = el.closest('.cs-panel');

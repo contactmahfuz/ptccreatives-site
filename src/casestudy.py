@@ -2,7 +2,8 @@
 # Give build_case() a dict (see CASE_TEMPLATE at the bottom) and it returns the page body.
 # Panel count is dynamic: the day->night ramp and the sun/moon arc stretch to fit.
 
-RAMP = ['#f4e9d2', '#eed8ac', '#d99a4e', '#c0693a', '#7e3528', '#38222e', '#122028', '#0a1414']
+# night -> day: the project is brought into the light
+RAMP = ['#0a1414', '#122028', '#38222e', '#7e3528', '#c0693a', '#d99a4e', '#eed8ac', '#f4e9d2']
 
 
 def _hex(c):
@@ -55,6 +56,7 @@ def build_case(c, prefix='../../'):
     panels.append(f"""
       <article class="cs-panel cs-title">
         <img class="cs-bg" src="{p}img/work/{c['cover']}.webp" alt="" aria-hidden="true">
+        {_fireflies(7)}
         <div class="cs-inner">
           <p class="cs-eyeb">{c['category']}{(' &#183; ' + c['year']) if c.get('year') else ''}</p>
           <h1 class="cs-h1" data-sp="1.3">{c['title']}</h1>
@@ -66,6 +68,7 @@ def build_case(c, prefix='../../'):
     # ---- 2. brief ----
     panels.append(f"""
       <article class="cs-panel">
+        {_fireflies(5, 11)}
         <div class="cs-inner cs-narrow">
           <p class="cs-eyeb">01 &#183; The Brief</p>
           <h2 class="cs-h2" data-sp="1.4">{c.get('brief_head','What they needed')}</h2>
@@ -119,7 +122,6 @@ def build_case(c, prefix='../../'):
             f'<div class="cs-stat"><b>{v}</b><span>{k}</span></div>' for v, k in c.get('results', []))
         panels.append(f"""
       <article class="cs-panel">
-        {_fireflies(6)}
         <div class="cs-inner cs-narrow">
           <p class="cs-eyeb">05 &#183; The Result</p>
           <h2 class="cs-h2" data-sp="1.4">{c.get('result_head','What came of it')}</h2>
@@ -133,7 +135,6 @@ def build_case(c, prefix='../../'):
         q = c['quote']
         panels.append(f"""
       <article class="cs-panel">
-        {_fireflies(5, 9)}
         <div class="cs-inner cs-narrow">
           <blockquote class="cs-quote" data-sp="0.8">&ldquo;{q['text']}&rdquo;</blockquote>
           <p class="cs-attr">{q['who']}{(', ' + q['role']) if q.get('role') else ''}</p>
@@ -144,7 +145,6 @@ def build_case(c, prefix='../../'):
     nxt = c.get('next')
     panels.append(f"""
       <article class="cs-panel cs-end">
-        {_fireflies(8, 17)}
         <div class="cs-inner cs-mid">
           <p class="cs-eyeb">PTC Creatives</p>
           <h2 class="cs-h2 cs-big" data-sp="1.1">Let's tell<br>yours <em>next.</em></h2>
@@ -208,7 +208,7 @@ CS_CSS = """
 .cs-list li::before{content:'';position:absolute;left:0;top:15px;width:9px;height:2px;background:var(--accent,#179c97);}
 .cs-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3;z-index:1;}
 .cs-title::after{content:'';position:absolute;inset:0;z-index:2;
-  background:linear-gradient(90deg,rgba(244,233,210,.92),rgba(244,233,210,.45));}
+  background:linear-gradient(90deg,rgba(8,16,16,.9),rgba(8,16,16,.5));}
 .cs-gal{display:flex;gap:22px;align-items:center;margin-top:30px;}
 .cs-shot{margin:0;flex:1 1 0;border-radius:4px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 20px 50px rgba(0,0,0,.35);}
 .cs-shot img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -219,6 +219,8 @@ CS_CSS = """
 .cs-quote{margin:0 0 22px;font-weight:300;font-size:clamp(22px,2.9vw,44px);line-height:1.4;color:var(--ink,#fff);}
 .cs-attr{font-size:13px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:var(--accent,#179c97);margin:0;}
 .cs-acts{display:flex;gap:26px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:34px;}
+#cs .ptc-btn{color:var(--ink,#fff);border-color:var(--accent,#179c97);}
+#cs .ptc-btn:hover{background:var(--accent,#179c97);color:#fff;}
 .cs-next{font-size:13px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--accent,#179c97);text-decoration:none;border-bottom:1px solid transparent;padding:12px 0;}
 .cs-next:hover{border-bottom-color:currentColor;}
 .cs-back{position:absolute;left:7vw;top:104px;z-index:20;font-size:12.5px;font-weight:400;letter-spacing:.18em;
@@ -269,9 +271,12 @@ CS_JS = """
       onUpdate:function(self){ gsap.set('#cs .cs-prog',{scaleX:self.progress}); }
     }});
     tl.to([track,'#cs .cs-grad'],{x:function(){ return -dist(); }, ease:'none', duration:4},0)
-      .fromTo('#cs .cs-sun',{x:'14vw',y:'10vh',rotation:0},{x:'60vw',y:'74vh',rotation:150,ease:'none',duration:2.7},0)
-      .to('#cs .cs-sun',{autoAlpha:0,duration:.3},2.6)
-      .fromTo('#cs .cs-moon',{x:'72vw',y:'120vh'},{x:'74vw',y:'12vh',ease:'power1.out',duration:1.1},2.8);
+      /* the moon sinks away, then the sun climbs: night into day */
+      .fromTo('#cs .cs-moon',{x:'16vw',y:'13vh',autoAlpha:1},{x:'44vw',y:'86vh',ease:'power1.in',duration:1.8},0)
+      .to('#cs .cs-moon',{autoAlpha:0,duration:.35},1.5)
+      .fromTo('#cs .cs-sun',{x:'52vw',y:'116vh',rotation:-140,autoAlpha:0},
+                            {x:'58vw',y:'72vh',rotation:-60,autoAlpha:1,ease:'none',duration:.6},1.5)
+      .to('#cs .cs-sun',{x:'74vw',y:'11vh',rotation:60,ease:'power2.out',duration:1.9},2.1);
     gsap.utils.toArray(cs.querySelectorAll('[data-sp]')).forEach(function(el){
       var sp = parseFloat(el.getAttribute('data-sp')) || 1;
       var panel = el.closest('.cs-panel');
