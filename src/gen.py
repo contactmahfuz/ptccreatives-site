@@ -743,7 +743,7 @@ cards = work_cards()
 import re as _re
 _home_grid = '<div class="work-grid" data-rotate="6" data-rotate-mobile="3">\n' + work_cards("case-studies.html") + '    '
 BODY_INDEX, _n = _re.subn(
-    r'<div class="work-grid">.*?(?=</div>\s*\n\s*<p class="note ptc-reveal">A selection\.)',
+    r'<div class="work-grid">.*?(?=</div>\s*\n\s*<a class="ptc-btn work-more)',
     lambda m: _home_grid, BODY_INDEX, flags=_re.S)
 assert _n == 1, f"homepage work grid: {_n} matches"
 
