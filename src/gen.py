@@ -465,6 +465,12 @@ NAV_ITEMS = [("Home","index.html"),("About","about.html"),("Services","services.
 
 SITE = "https://ptccreatives.com"
 
+# ---------- clean URLs: internal links and canonicals drop ".html" (GitHub Pages serves /about for about.html)
+_CLEAN_PAGES = "about|services|case-studies|contact|privacy"
+def clean_urls(s):
+    s = re.sub(r'href="(?:\.\./\.\./)?(' + _CLEAN_PAGES + r')\.html', r'href="/\1', s)
+    return re.sub(r'(https://ptccreatives\.com/)(' + _CLEAN_PAGES + r')\.html', r'\1\2', s)
+
 JSONLD = """<script type="application/ld+json">
 {
  "@context":"https://schema.org",
@@ -496,7 +502,7 @@ JSONLD = """<script type="application/ld+json">
 """
 
 def head(title, desc, fname="index.html", p=""):
-    canon = SITE + "/" + ("" if fname == "index.html" else fname)
+    canon = SITE + "/" + ("" if fname == "index.html" else fname.removesuffix(".html"))
     ld = JSONLD if fname == "index.html" else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -522,7 +528,7 @@ def head(title, desc, fname="index.html", p=""):
 <meta name="twitter:image" content="{SITE}/img/og.jpg">
 {ld}
 <link rel="icon" type="image/png" href="{p}img/favicon.png">
-<script>if(location.pathname.slice(-11)==='/index.html')history.replaceState(null,'',location.pathname.slice(0,-10)+location.search+location.hash);</script>
+<script>var __pp=location.pathname,__pq=__pp.slice(-11)==='/index.html'?__pp.slice(0,-10):__pp.slice(-5)==='.html'?__pp.slice(0,-5):__pp;if(__pq!==__pp)history.replaceState(null,'',__pq+location.search+location.hash);</script>
 <link rel="apple-touch-icon" href="{p}img/apple-touch.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -878,7 +884,7 @@ bodies = {"index.html": BODY_INDEX, "about.html": BODY_ABOUT, "services.html": B
           "privacy.html": BODY_PRIVACY.replace("{BAND_SUN}", BAND_SUN).replace("{BM_LOTUS}", BM_LOTUS)}
 for fname, (active, title, desc) in PAGES.items():
     html = head(title, desc, fname) + nav(active, day=(fname != "index.html")) + detok(bodies[fname]) + footer()
-    open(f"{OUT}/{fname}", "w").write(html)
+    open(f"{OUT}/{fname}", "w").write(clean_urls(html))
     print(fname, len(html)//1024, "KB")
 # case study pages at /work/<slug>/
 CASE_URLS = []
@@ -895,7 +901,7 @@ for _ci, _cs in enumerate(CASE_STUDIES):
              + nav("Case Studies", day=True, p=_p)
              + build_case(_c, _p)
              + footer(_p))
-    open(f"{_d}/index.html", "w").write(_html)
+    open(f"{_d}/index.html", "w").write(clean_urls(_html))
     CASE_URLS.append(f"work/{_cs['slug']}/")
     print("case:", _cs["slug"])
 
@@ -909,7 +915,7 @@ _prio = {"index.html": "1.0", "services.html": "0.9", "case-studies.html": "0.9"
 _prio.update({_u: "0.8" for _u in CASE_URLS})
 _urls = ""
 for _f in list(PAGES) + CASE_URLS:
-    _loc = SITE + "/" + ("" if _f == "index.html" else _f)
+    _loc = SITE + "/" + ("" if _f == "index.html" else _f.removesuffix(".html"))
     _urls += (f"  <url>\n    <loc>{_loc}</loc>\n    <lastmod>{_today}</lastmod>\n"
               f"    <changefreq>monthly</changefreq>\n    <priority>{_prio.get(_f,'0.5')}</priority>\n  </url>\n")
 open(f"{OUT}/sitemap.xml", "w").write(
