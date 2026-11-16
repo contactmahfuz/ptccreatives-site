@@ -167,7 +167,7 @@ SEC_FEATURED = """
   <section class="dots" id="featured">
     <p class="ptc-eyeb ptc-reveal">Featured Film</p>
     <h2 class="ptc-reveal">See Us <em>in Motion</em></h2>
-    <p class="lead ptc-reveal">A recent production — press play.</p>
+    <p class="lead ptc-reveal">A recent production. Press play.</p>
     <div class="film ptc-reveal">
       <div class="film-frame" data-yt="YJovd_GEqYw" role="button" tabindex="0" aria-label="Play PTC Creatives film">
         <img class="film-thumb" src="https://i.ytimg.com/vi/YJovd_GEqYw/maxresdefault.jpg" alt="" loading="lazy" onerror="this.remove()">
@@ -214,6 +214,7 @@ SEC_TEAM = f"""
 """
 
 SEC_PROCESS = grab("process", r"(<!-- ===== PROCESS ===== -->.*?</section>)")
+SEC_PROCESS_RAW = SEC_PROCESS  # pre-palette copy; used to strip it from the homepage
 SEC_STATS   = grab("stats",   r"(<!-- ===== STATS =====.*?</section>)")
 SEC_CTA     = grab("cta",     r"(<!-- ===== CTA ===== -->.*?</section>)")
 SEC_PROCESS = SEC_PROCESS.replace('<section class="dots ptc-process">', '<section class="ptc-process pg-eve">')
@@ -372,7 +373,7 @@ EXTRA_JS = """
     if(f.getAttribute('action').indexOf('YOUR_FORM_ID')>-1){
       e.preventDefault();
       var m=f.querySelector('.fmsg');
-      if(m){m.textContent='The form is not connected yet — please use the email or phone number above.';m.style.display='block';}
+      if(m){m.textContent='The form is not connected yet. Please use the email or phone number above.';m.style.display='block';}
     }
   });
   var y=document.getElementById('ptc-year'); if(y) y.textContent=new Date().getFullYear();
@@ -407,11 +408,11 @@ EXTRA_JS = """
 
 # ---------- shared partials ----------
 PAGES = {
-    "index.html":        ("Home",         "PTC Creatives — Stories Told With Passion", "Creative production house in Dhaka: video production, documentaries, podcasts, design and digital campaigns for businesses worldwide."),
-    "about.html":        ("About",        "About — PTC Creatives", "The studio behind the stories: who we are, how we work, and what we believe about content."),
-    "services.html":     ("Services",     "Services — PTC Creatives", "Video production, content audit, content strategy, design & printing, social media management and web presence."),
-    "case-studies.html": ("Case Studies", "Case Studies — PTC Creatives", "Selected work: documentaries, campaigns, podcasts and corporate films by PTC Creatives."),
-    "contact.html":      ("Contact",      "Contact — PTC Creatives", "Schedule a free strategy call with PTC Creatives. No strings attached."),
+    "index.html":        ("Home",         "PTC Creatives | Stories Told With Passion", "Creative production house in Dhaka: video production, documentaries, podcasts, design and digital campaigns for businesses worldwide."),
+    "about.html":        ("About",        "About | PTC Creatives", "The studio behind the stories: who we are, how we work, and what we believe about content."),
+    "services.html":     ("Services",     "Services | PTC Creatives", "Video production, content audit, content strategy, design & printing, social media management and web presence."),
+    "case-studies.html": ("Case Studies", "Case Studies | PTC Creatives", "Selected work: documentaries, campaigns, podcasts and corporate films by PTC Creatives."),
+    "contact.html":      ("Contact",      "Contact | PTC Creatives", "Schedule a free strategy call with PTC Creatives. No strings attached."),
 }
 NAV_ITEMS = [("Home","index.html"),("About","about.html"),("Services","services.html"),("Case Studies","case-studies.html")]
 
@@ -473,7 +474,7 @@ FOOTER = """<footer class="ptc-footer">
         <li>H-1263, Road 10, Avenue 2,<br>Mirpur DOHS, Dhaka-1216, Bangladesh</li>
         <li><a href="tel:+8801762206983">+880 1762 206983</a></li>
         <li><a href="mailto:contact@ptccreatives.com">contact@ptccreatives.com</a></li>
-        <li><a href="https://www.facebook.com/PTCcreatives" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.linkedin.com/company/ptc-creatives" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.facebook.com/PTCcreatives" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/ptccreatives/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.linkedin.com/company/ptc-creatives" target="_blank" rel="noopener">LinkedIn</a></li>
       </ul>
     </div>
   </div>
@@ -499,7 +500,7 @@ TRAVELERS = """
   <div id="trav-fish" aria-hidden="true"><img src="img/fish1.webp" alt=""><img src="img/fish2.webp" alt=""></div>
 """
 # homepage: About strip + Process move into the unrolling-scroll chapter (About page keeps its own copies)
-sect_home = sect_body.replace(SEC_PROCESS, "")
+sect_home = sect_body.replace(SEC_PROCESS_RAW, "")  # "How We Work" lives in the scroll chapter now
 sect_home = re.sub(r"\n  <!-- ===== ABOUT STRIP ===== -->.*?</section>\n", "\n", sect_home, flags=re.S)
 sect_home = sect_home.replace('<div id="ptc-main">', '<div id="ptc-main">\n' + SEC_PATA, 1)
 sect_home = apply_home(sect_home)
@@ -511,20 +512,19 @@ BODY_ABOUT = f"""<div id="ptc-main">
     {BM_LOTUS}
     <p class="ptc-eyeb ptc-reveal">About Us</p>
     <h1 class="ptc-reveal">The studio behind<br>the <em>stories</em></h1>
-    <p class="lead ptc-reveal">PTC Creatives is a creative production house based in Dhaka — part strategy consultancy, part film crew, part design studio.</p>
+    <p class="lead ptc-reveal">PTC Creatives is a creative production house based in Dhaka: part strategy consultancy, part film crew, part design studio.</p>
   </section>
   <section class="dots pg-amber">
     <h2 class="ptc-reveal">Why we <em>exist</em></h2>
-    <p class="lead ptc-reveal">Founded in 2025, PTC Creatives was built on a simple belief: businesses don't have a content problem, they have a story problem. From corporate AV films and national documentaries to podcast branding and full digital campaigns, we help organisations say what they actually mean — and say it beautifully.</p>
-    <p class="lead ptc-reveal" style="margin-top:18px;">Our visual language draws on the storytelling traditions of Bengal — the scroll, the frame, the motif — rebuilt for the screens your audience actually watches.</p>
+    <p class="lead ptc-reveal">Founded in 2025, PTC Creatives was built on a simple belief: businesses don't have a content problem, they have a story problem. From corporate AV films and national documentaries to podcast branding and full digital campaigns, we help organisations say what they actually mean, and say it beautifully.</p>
+    <p class="lead ptc-reveal" style="margin-top:18px;">Our visual language draws on the storytelling traditions of Bengal: the scroll, the frame, the motif, rebuilt for the screens your audience actually watches.</p>
     <div class="val-grid">
       <div class="svc ptc-reveal"><h3>End-to-End, In-House</h3><p>Strategy, script, shoot, edit, design and distribution under one roof. Nothing lost in handovers.</p></div>
       <div class="svc ptc-reveal"><h3>Strategy Before Camera</h3><p>Every frame answers a business question. We verify the concept before full production begins.</p></div>
-      <div class="svc ptc-reveal"><h3>Rooted, Not Retro</h3><p>Local storytelling instincts, global production standards — work that stands out in any feed, anywhere.</p></div>
+      <div class="svc ptc-reveal"><h3>Rooted, Not Retro</h3><p>Local storytelling instincts, global production standards. Work that stands out in any feed, anywhere.</p></div>
     </div>
   </section>
   {SEC_TEAM}
-  {SEC_PROCESS}
   {SEC_STATS}
   {SEC_CTA}
 </div>
@@ -534,22 +534,22 @@ SVC_ICONS = re.findall(r"(<svg viewBox=\"0 0 48 48\">.*?</svg>)", sect_body, re.
 
 SERVICES = [
     ("Video Production",
-     "Brand stories that capture your company's voice and engage the audience they're made for — built to generate leads, not just views.",
+     "Brand stories that capture your company's voice and engage the audience they're made for, built to generate leads, not just views.",
      ["Corporate AV &amp; company profiles","Documentaries","Podcast production","Music videos","TVC &amp; OVC","Event aftermovies"]),
     ("Event Management",
-     "Concept to coverage — we plan, run and capture events end to end, handling the production on the ground and on camera.",
+     "Concept to coverage. We plan, run and capture events end to end, handling the production on the ground and on camera.",
      ["Event concept &amp; planning","On-ground management","Multi-camera coverage","Photo &amp; video wrap-up"]),
     ("Content Strategy",
-     "Data-driven content plans that turn posting into a system — built for engagement, visibility and measurable business growth.",
+     "Data-driven content plans that turn posting into a system, built for engagement, visibility and measurable business growth.",
      ["Messaging &amp; positioning","Content pillars &amp; calendar","Platform strategy","KPI framework &amp; reporting"]),
     ("Graphic Design &amp; Printing",
-     "Ideas turned into bold visuals that strengthen brand identity and capture attention — on screen and on paper.",
+     "Ideas turned into bold visuals that strengthen brand identity and capture attention, on screen and on paper.",
      ["Brand identity","Campaign key visuals","Social media creatives","Print collateral"]),
     ("Social Media Management",
      "Strategic campaigns, tailored content and consistent engagement that grow a presence your audience actually follows.",
      ["Monthly calendars &amp; captions","Community management","Paid campaign management","Monthly reporting"]),
     ("Web Presence",
-     "Responsive websites, search optimisation and cohesive digital branding — so everything online points the same direction.",
+     "Responsive websites, search optimisation and cohesive digital branding, so everything online points the same direction.",
      ["Websites &amp; landing pages","Search engine optimisation","Digital brand consistency"]),
 ]
 rows = ""
@@ -566,7 +566,7 @@ BODY_SERVICES = f"""<div id="ptc-main">
     {BM_FISH}
     <p class="ptc-eyeb ptc-reveal">Our Services</p>
     <h1 class="ptc-reveal">Everything your story needs,<br>under <em>one roof</em></h1>
-    <p class="lead ptc-reveal">Six disciplines, one team — so your brand sounds like itself everywhere it appears.</p>
+    <p class="lead ptc-reveal">Six disciplines, one team, so your brand sounds like itself everywhere it appears.</p>
   </section>
   <section class="dots pg-grad-serv" style="padding-top:40px;">
 {rows}  </section>
@@ -576,17 +576,17 @@ BODY_SERVICES = f"""<div id="ptc-main">
 
 CASES = [
     ("Documentary","m-lotus","Chronicles of July","Documentary Film",
-     "A feature documentary on the July Revolution of Bangladesh — research, scripting and production through to a premiere screening."),
+     "A feature documentary on the July Revolution of Bangladesh: research, scripting and production through to a premiere screening."),
     ("Campaign","m-fish1","Investor Education Series","WeGro",
      "A six-film series for the agri-fintech platform WeGro, turning investment concepts into plain-language stories for first-time investors."),
     ("Podcast","m-fish2","CounterNarrative S2","The Bangladesh Dialogue",
-     "Complete audio-visual branding for season two of a national policy podcast — identity, intro package and episode templates."),
+     "Complete audio-visual branding for season two of a national policy podcast: identity, intro package and episode templates."),
     ("Corporate AV","m-fish1","PHC Pile Process Films","Samuda Construction",
      "Narrated AV films that turn heavy manufacturing into a clear, confident story for clients and partners."),
     ("OVC","m-lotus","Reclaiming Lost Shares","United Securities Ltd.",
      "An emotive online video commercial helping families discover and recover shares they never knew they owned."),
     ("360° Campaign","m-fish2","AvoidRafa Launch","Concert &amp; Album",
-     "A full-funnel launch campaign for a concert and album drop — content strategy, influencer activations and release-day push."),
+     "A full-funnel launch campaign for a concert and album drop: content strategy, influencer activations and release-day push."),
 ]
 # EDIT: add a URL as a 6th item to make a card clickable; until then it renders
 # as a non-link so it can't dead-jump to the top of the page.
@@ -613,7 +613,7 @@ BODY_CASES = f"""<div id="ptc-main">
   <section class="dots pg-grad-case" id="work" style="padding-top:30px;">
     <div class="work-grid">
 {cards}    </div>
-    <p class="note ptc-reveal">Draft entries — titles, clients and links to be finalised.</p>
+    <p class="note ptc-reveal">Draft entries. Titles, clients and links to be finalised.</p>
   </section>
   {SEC_CTA}
 </div>

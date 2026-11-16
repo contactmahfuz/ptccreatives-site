@@ -41,7 +41,7 @@ SVG_FEATHER = """<svg class="dr dr-feather" viewBox="0 0 160 230" fill="none" st
 <path pathLength="1" d="M88 160 C 104 154, 116 144, 122 130"/>
 </svg>"""
 
-TICKER = ("FILMS — PODCASTS — CAMPAIGNS — DESIGN — EVENTS — DOCUMENTARIES — " * 4)
+TICKER = ("FILMS &#183; PODCASTS &#183; CAMPAIGNS &#183; DESIGN &#183; EVENTS &#183; DOCUMENTARIES &#183; " * 4)
 
 SEC_PATA = f"""
   <!-- ===== THE UNROLLING SCROLL (day -> night) ===== -->
@@ -65,30 +65,30 @@ SEC_PATA = f"""
 
         <article class="ps-panel ps-p2 ps-ink">
           <div class="ps-inner relative">
-            <p class="ps-eyeb">01 — Listen</p>
+            <p class="ps-eyeb">01 &#183; Listen</p>
             <h2 class="kin" data-sp="1.5">WE LISTEN</h2>
             <h2 class="kin kin-o kin-s" data-sp="2">KNOW · UNDERSTAND · VERIFY</h2>
-            <p class="ps-copy" data-sp="0.6">Your business, your audience, your market —<br>tested before a single frame rolls.</p>
+            <p class="ps-copy" data-sp="0.6">Your business, your audience, your market,<br>tested before a single frame rolls.</p>
           </div>
           <div class="ps-art pointer-events-none select-none">{SVG_FISH}</div>
         </article>
 
         <article class="ps-panel ps-p3 ps-cream">
           <div class="ps-inner relative">
-            <p class="ps-eyeb">02 — Craft</p>
+            <p class="ps-eyeb">02 &#183; Craft</p>
             <h2 class="kin" data-sp="1.5">WE CREATE</h2>
             <h2 class="kin kin-o kin-s" data-sp="2">FILM · DESIGN · BUILD</h2>
-            <p class="ps-copy" data-sp="0.6">Films and podcasts, brands and campaigns,<br>events and websites — the craft happens here.</p>
+            <p class="ps-copy" data-sp="0.6">Films and podcasts, brands and campaigns,<br>events and websites.<br>The craft happens here.</p>
           </div>
         </article>
 
         <article class="ps-panel ps-p4 ps-cream">
           {_fireflies(10)}
           <div class="ps-inner relative">
-            <p class="ps-eyeb">03 — Grow</p>
+            <p class="ps-eyeb">03 &#183; Grow</p>
             <h2 class="kin" data-sp="1.5">WE GROW</h2>
             <h2 class="kin kin-o kin-s" data-sp="2">MEASURE · REFINE · SCALE</h2>
-            <p class="ps-copy" data-sp="0.6">Work that travels — and keeps working<br>long after launch day.</p>
+            <p class="ps-copy" data-sp="0.6">Work that travels and keeps working<br>long after launch day.</p>
           </div>
           <div class="ps-art pointer-events-none select-none">{SVG_FEATHER}</div>
         </article>

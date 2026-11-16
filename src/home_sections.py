@@ -3,7 +3,7 @@
 import re
 
 IX_ROWS = [
-    ("01", "Video Production",  "Films, documentaries, podcasts & music videos — crafted in-house.", "img/sun.webp"),
+    ("01", "Video Production",  "Films, documentaries, podcasts & music videos, crafted in-house.", "img/sun.webp"),
     ("02", "Event Management",  "Concept to coverage, on the ground and on camera.",                 "img/peacock.webp"),
     ("03", "Content Strategy",  "A roadmap for what to say, where, and how often.",                  "img/fish1.webp"),
     ("04", "Graphic Design &amp; Printing", "Identities and visuals, on screen and on paper.",       "img/lotus.webp"),
@@ -34,7 +34,7 @@ SEC_DIAL = f"""<section class="cta dots" id="start">
     <p class="ptc-eyeb ptc-reveal">No Strings Attached</p>
     <h2 class="ptc-reveal">Let's create something<br>that <em>matters.</em></h2>
     <p class="lead ptc-reveal" style="margin:0 auto;">Schedule a free strategy call and tell us what you're trying to say.</p>
-    <a class="dial ptc-reveal" href="contact.html" aria-label="Start your story — contact us">
+    <a class="dial ptc-reveal" href="contact.html" aria-label="Start your story, contact us">
       <svg class="dial-ring" viewBox="0 0 200 200" aria-hidden="true">
         <defs><path id="dialpath" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs>
         <text textLength="500" lengthAdjust="spacingAndGlyphs"><textPath href="#dialpath">START YOUR STORY &#183; START YOUR STORY &#183; START YOUR STORY &#183;</textPath></text>
@@ -44,7 +44,7 @@ SEC_DIAL = f"""<section class="cta dots" id="start">
   </section>"""
 
 def _ghost(text, rev=False):
-    t = (text + " &mdash; ") * 8
+    t = (text + " &#183; ") * 8
     return f'<div class="ghost{" ghost-r" if rev else ""}" aria-hidden="true"><span>{t}</span></div>\n  '
 
 RAIL = """

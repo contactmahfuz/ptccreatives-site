@@ -85,7 +85,7 @@
     if(f.getAttribute('action').indexOf('YOUR_FORM_ID')>-1){
       e.preventDefault();
       var m=f.querySelector('.fmsg');
-      if(m){m.textContent='The form is not connected yet — please use the email or phone number above.';m.style.display='block';}
+      if(m){m.textContent='The form is not connected yet. Please use the email or phone number above.';m.style.display='block';}
     }
   });
   var y=document.getElementById('ptc-year'); if(y) y.textContent=new Date().getFullYear();
