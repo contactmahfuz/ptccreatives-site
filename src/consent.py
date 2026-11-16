@@ -5,7 +5,7 @@ CONSENT_HTML = """
   <div id="ck" class="ck" role="dialog" aria-label="Cookie choices" hidden>
     <div class="ck-in">
       <p class="ck-txt">We use cookies to see what brings people here and to show our work to the right
-      audiences on platforms like Facebook and Instagram. Decline and the site works exactly the same.</p>
+      audiences on social media. Decline and the site works exactly the same.</p>
       <div class="ck-act">
         <a class="ck-more" href="privacy.html">Privacy Policy</a>
         <button class="ck-btn ck-no" type="button">Decline</button>
