@@ -18,8 +18,8 @@
   if(!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ---- entrance: the scene assembles on load ---- */
-  gsap.timeline({defaults:{ease:'power3.out'}})
+  /* ---- entrance: the scene assembles on load (after the iris preloader opens, on a first visit) ---- */
+  gsap.timeline({delay:document.getElementById('ldr')?1.1:0,defaults:{ease:'power3.out'}})
     .from('#ptc-hero .ptc-arch',{y:140,autoAlpha:0,duration:.9,stagger:.14})
     .from('#ptc-hero .ptc-sun',{scale:.5,rotation:-45,autoAlpha:0,duration:1.1,ease:'back.out(1.4)'},'-=.55')
     .from('#ptc-hero .ptc-figure',{y:60,autoAlpha:0,duration:.9},'-=.65')
@@ -51,8 +51,8 @@
     choreo(gsap.timeline({scrollTrigger:{trigger:'#ptc-hero',start:'top top',end:'+=120%',scrub:1,pin:true,anticipatePin:1}}),1);
   });
   mm.add('(max-width:699px)',function(){
-    /* lighter, unpinned parallax on phones */
-    choreo(gsap.timeline({scrollTrigger:{trigger:'#ptc-hero',start:'top 85%',end:'bottom top',scrub:1}}),.6);
+    /* lighter, unpinned parallax on phones: starts at 0% on load, plays as the hero scrolls away */
+    choreo(gsap.timeline({scrollTrigger:{trigger:'#ptc-hero',start:'top top',end:'bottom top',scrub:1}}),.6);
   });
 }catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
 
