@@ -254,7 +254,18 @@ body{margin:0;background:#101f1f;}
 #ptc-main .tm figcaption b{display:block;font-size:17px;font-weight:600;color:#fff;}
 #ptc-main .tm figcaption span{display:block;margin-top:5px;font-size:12px;font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:#179c97;}
 @media (max-width:900px){#ptc-main .tm-grid{grid-template-columns:1fr 1fr;}}
-@media (max-width:600px){#ptc-main .tm-grid{grid-template-columns:1fr 1fr;gap:14px;}#ptc-main .tm figcaption{padding:14px 14px 18px;}#ptc-main .tm figcaption b{font-size:14px;}}
+@media (max-width:600px){
+  #ptc-main .tm-grid{grid-template-columns:1fr 1fr;gap:14px;}
+  #ptc-main .tm figcaption{padding:14px 14px 16px;}
+  /* two lines reserved for the name so every role lines up across a row */
+  #ptc-main .tm figcaption b{font-size:14px;line-height:1.25;min-height:2.5em;}
+  /* long single words (Cinematographer) were being clipped by the card */
+  #ptc-main .tm figcaption span{letter-spacing:.06em;overflow-wrap:anywhere;}
+  /* the badge used to sit on top of the name and the role: there is no room
+     for it beside them on a narrow card, so lift it onto the photo */
+  #ptc-main .tm-li{top:-52px;right:10px;transform:none;width:40px;height:40px;
+    font-size:14px;background:rgba(10,20,20,.55);border-color:rgba(23,156,151,.85);}
+}
 /* ===== cross-page transitions (progressive enhancement) ===== */
 @view-transition{navigation:auto;}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.4s;}

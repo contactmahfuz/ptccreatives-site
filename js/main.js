@@ -144,7 +144,7 @@
 
 
 /* ===== film grain: animated noise that lives on the backgrounds, under all content ===== */
-(function(){
+(function(){try{
   var root = document.querySelector('.grain');
   if(!root) return;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -188,7 +188,7 @@
   if(reduce) return;
   var last = 0, step = 1000 / 24;
   (function tick(now){ if(now - last >= step){ last = now; frame(false); } requestAnimationFrame(tick); })(0);
-})();
+}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
 
 /* ===== lenis smooth scrolling ===== */
 (function(){try{
