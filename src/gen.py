@@ -354,7 +354,7 @@ body{margin:0;background:#101f1f;}
 #ptc-main .tm{margin:0;background:#15292a;overflow:hidden;border-bottom:2px solid rgba(23,156,151,.25);transition:transform .35s,border-color .35s;}
 #ptc-main .tm:hover{transform:translateY(-6px);border-bottom-color:#179c97;}
 #ptc-main .tm-ph{position:relative;aspect-ratio:2/3;overflow:hidden;}
-#ptc-main .tm-ph img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3) brightness(.95);transition:filter .4s,transform .6s;}
+#ptc-main .tm-ph img{width:100%;height:100%;object-fit:cover;filter:grayscale(.85) brightness(.92);transition:filter .5s,transform .6s;}
 #ptc-main .tm:hover .tm-ph img{filter:none;transform:scale(1.04);}
 #ptc-main .tm-ph::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(21,41,42,.6),transparent 42%);}
 #ptc-main .tm figcaption{position:relative;padding:20px 60px 24px 22px;}
@@ -533,7 +533,7 @@ def head(title, desc, fname="index.html", p=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{p}css/tw.css">
-<link rel="stylesheet" href="{p}css/site.css?v=20261117c">
+<link rel="stylesheet" href="{p}css/site.css?v=20261117d">
 </head>
 <body>
 """ + PRELUDE_HTML.replace('src="img/', f'src="{p}img/')
@@ -590,7 +590,7 @@ def footer(p=""):
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="{p}js/main.js?v=20261117c"></script>
+<script src="{p}js/main.js?v=20261117d"></script>
 </body>
 </html>
 """
