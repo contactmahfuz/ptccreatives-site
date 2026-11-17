@@ -199,7 +199,7 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
   html.js-h .ps-grad span:nth-child(3){background:linear-gradient(90deg,#c0693a 0%,#7e3528 55%,#38222e 100%);}
   html.js-h .ps-grad span:nth-child(4){background:linear-gradient(90deg,#38222e 0%,#122028 60%,#0d1a20 100%);}
   html.js-h .ps-grad span:nth-child(5){background:linear-gradient(90deg,#0d1a20 0%,#0a1414 100%);}
-  html.js-h .ps-sun{position:absolute;left:0;top:0;width:200px;z-index:1;will-change:transform;}
+  html.js-h .ps-sun{position:absolute;left:0;top:0;width:150px;z-index:1;will-change:transform;}
   html.js-h .ps-moon{position:absolute;left:0;top:0;width:110px;z-index:1;transform:translate(70vw,120vh);
     filter:drop-shadow(0 0 26px rgba(244,233,210,.35));will-change:transform;}
   html.js-h .ps-rail{display:block;position:absolute;left:0;right:0;bottom:0;height:58px;z-index:4;
