@@ -127,18 +127,24 @@
 
   /* ---- scroll choreography ---- */
   function choreo(st,k){
-    st.to('#ptc-hero .ptc-arch-teal',{y:-70*k},0)
-      .to('#ptc-hero .ptc-arch-char',{y:-115*k},0)
-      .to('#ptc-hero .ptc-arch-verm',{y:-45*k},0)
-      .to('#ptc-hero .ptc-sun',{rotation:75,scale:1.07},0)
-      .to('#ptc-hero .ptc-ribbon',{x:-55*k},0)
-      .to('#ptc-hero .ptc-figure',{y:-30*k},0)
-      .to('#ptc-hero .ptc-lotus',{y:-45*k,rotation:-6},0)
-      .to('#ptc-hero .ptc-fish1',{x:-75*k},0)
-      .to('#ptc-hero .ptc-fish2',{x:-50*k},0)
-      .to('#ptc-hero .ptc-peacock',{y:-28*k},0)
-      .to('#ptc-hero .ptc-border',{backgroundPositionX:'-=280px'},0)
-      .to('#ptc-hero .ptc-cue',{autoAlpha:0,duration:.1},0);
+    /* explicit start values (the assembled scene), so the scroll timeline never
+       records the entrance's hidden/offset frame as its starting pose */
+    function m(sel,from,to,dur){
+      to.immediateRender=false; if(dur) to.duration=dur;
+      st.fromTo('#ptc-hero '+sel,from,to,0);
+    }
+    m('.ptc-arch-teal',{y:0},{y:-70*k});
+    m('.ptc-arch-char',{y:0},{y:-115*k});
+    m('.ptc-arch-verm',{y:0},{y:-45*k});
+    m('.ptc-sun',{rotation:0,scale:1},{rotation:75,scale:1.07});
+    m('.ptc-ribbon',{x:0},{x:-55*k});
+    m('.ptc-figure',{y:0},{y:-30*k});
+    m('.ptc-lotus',{y:0,rotation:0},{y:-45*k,rotation:-6});
+    m('.ptc-fish1',{x:0},{x:-75*k});
+    m('.ptc-fish2',{x:0},{x:-50*k});
+    m('.ptc-peacock',{y:0},{y:-28*k});
+    m('.ptc-border',{backgroundPositionX:'0px'},{backgroundPositionX:'-280px'});
+    m('.ptc-cue',{autoAlpha:1},{autoAlpha:0},.1);
   }
   var mm=gsap.matchMedia();
   mm.add('(min-width:700px)',function(){

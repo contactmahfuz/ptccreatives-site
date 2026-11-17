@@ -533,7 +533,7 @@ def head(title, desc, fname="index.html", p=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{p}css/tw.css">
-<link rel="stylesheet" href="{p}css/site.css?v=20261117f">
+<link rel="stylesheet" href="{p}css/site.css?v=20261117g">
 </head>
 <body>
 """ + PRELUDE_HTML.replace('src="img/', f'src="{p}img/')
@@ -590,7 +590,7 @@ def footer(p=""):
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="{p}js/main.js?v=20261117f"></script>
+<script src="{p}js/main.js?v=20261117g"></script>
 </body>
 </html>
 """
