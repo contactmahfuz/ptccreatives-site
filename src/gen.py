@@ -732,8 +732,8 @@ CASES = [
      "A long-form interview series produced and branded with us, from studio setup through to post."),
     ("fgcc","Institutional Film","Feni Girls' Cadet College","FGCC",
      "An institutional film capturing the character of one of the country's cadet colleges."),
-    ("merch","Design","Brand Merchandising","WeGro, United Securities, Momentum",
-     "Identity applied across merchandise, print and collateral: totes, notebooks, profiles and packaging."),
+    ("merch","Design","Brand Merchandising","Samuda Construction Ltd",
+     "Identity carried from the corporate profile through to print collateral and branded merchandise."),
     ("almostfriday","Event Coverage","Almost Friday","Chords",
      "Live music coverage, photography and video, capturing the room as it happened."),
 ]
