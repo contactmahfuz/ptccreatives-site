@@ -311,6 +311,7 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 .kin{font-family:'Poppins',sans-serif;font-weight:600;line-height:.95;letter-spacing:-.015em;margin:0 0 10px;font-size:clamp(64px,11vw,176px);white-space:nowrap;}
 .kin-o{color:transparent!important;-webkit-text-stroke:1.5px #f4e9d2;}
 .ps-ink .kin-o{-webkit-text-stroke-color:#241e16;}
+#ptc-main .ps-ink .kin{color:#241e16;}
 .kin-s{font-size:clamp(26px,3.2vw,52px);letter-spacing:.12em;}
 .kin-big{font-size:clamp(56px,9vw,152px);white-space:normal;line-height:1.02;}
 .ps-copy{font-weight:300;font-size:clamp(17px,1.5vw,23px);line-height:1.8;margin:28px 0 0;opacity:.92;}
