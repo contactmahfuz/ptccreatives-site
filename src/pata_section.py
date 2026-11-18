@@ -109,7 +109,7 @@ SEC_PATA = f"""
   </section>
 """
 
-PRELUDE_HTML = """<div id="ldr" aria-hidden="true"><img src="img/sun.webp" alt=""></div>
+PRELUDE_HTML = """<div id="ldr" aria-hidden="true"><img src="/img/mark-cream.webp" alt=""></div>
 <script>(function(){var l=document.getElementById('ldr');var rm=false;
 try{rm=!!sessionStorage.getItem('ptcld')}catch(e){}
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)rm=true;
@@ -139,7 +139,7 @@ html.js-h .ps-panel>.gr,html.js-h #cs .cs-panel>.gr{display:none;}
 
 /* ============ iris preloader ============ */
 #ldr{position:fixed;inset:0;z-index:999;background:#0a1414;display:flex;align-items:center;justify-content:center;}
-#ldr img{width:150px;height:auto;opacity:.95;}
+#ldr img{width:clamp(110px,14vw,170px);height:auto;opacity:0;}
 
 /* ============ custom cursor ============ */
 #curd,#curr{position:fixed;left:0;top:0;z-index:400;pointer-events:none;border-radius:50%;display:none;mix-blend-mode:difference;}
@@ -156,7 +156,8 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 .ps-panel{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;padding:80px 7vw;}
 .ps-inner{position:relative;z-index:3;max-width:1100px;}
 .ps-center{text-align:center;margin:0 auto;}
-.ps-eyeb{font-size:13px;font-weight:400;letter-spacing:.42em;text-transform:uppercase;color:#179c97;margin:0 0 22px;}
+.ps-eyeb{display:inline-flex;align-items:center;gap:12px;font-size:13px;font-weight:500;letter-spacing:.42em;line-height:1;text-transform:uppercase;color:#f4e9d2;background:rgba(36,30,22,.9);padding:9px 10px 9px 14px;margin:0 0 22px;box-shadow:inset 0 0 0 1px rgba(244,233,210,.14);}
+.ps-eyeb::before{content:'';width:6px;height:6px;flex:0 0 6px;background:#e8a317;transform:rotate(45deg);}
 .kin{font-family:'Poppins',sans-serif;font-weight:600;line-height:.95;letter-spacing:-.015em;margin:0 0 10px;font-size:clamp(64px,11vw,176px);white-space:nowrap;}
 .kin-o{color:transparent!important;-webkit-text-stroke:1.5px #f4e9d2;}
 .ps-ink .kin-o{-webkit-text-stroke-color:#241e16;}
@@ -165,7 +166,6 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 .kin-big{font-size:clamp(56px,9vw,152px);white-space:normal;line-height:1.02;}
 .ps-copy{font-weight:300;font-size:clamp(17px,1.5vw,23px);line-height:1.8;margin:28px 0 0;opacity:.92;}
 .ps-ink{color:#241e16;}
-.ps-ink .ps-eyeb{color:#a8431f;}
 .ps-cream{color:#f4e9d2;}
 .ps-art{position:absolute;right:8vw;top:50%;transform:translateY(-50%);z-index:2;opacity:.9;}
 .dr{width:min(24vw,300px);height:auto;}
@@ -190,6 +190,11 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
   html.js-h .ps-panel{width:100vw;height:100vh;min-height:0;flex:0 0 auto;padding:0 7vw;}
   /* sky holds the gradient strip + sun; the track rides above it so text is never covered */
   html.js-h .ps-panel{background:transparent;}
+html.js-h .kin-s{font-size:clamp(22px,2.6vw,46px);}
+html.js-h .ps-art{right:4vw;}
+html.js-h .ps-art .dr{width:min(17vw,250px);}
+html.js-h .ps-art{transition:opacity .35s;}
+html.js-h .ps-art.is-off{opacity:0;}
   html.js-h .ps-track{position:relative;z-index:2;}
   html.js-h .ps-sky{display:block;position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
   html.js-h .ps-grad{position:absolute;top:0;left:0;height:100%;width:500vw;display:flex;z-index:0;will-change:transform;}
@@ -199,7 +204,7 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
   html.js-h .ps-grad span:nth-child(3){background:linear-gradient(90deg,#c0693a 0%,#7e3528 55%,#38222e 100%);}
   html.js-h .ps-grad span:nth-child(4){background:linear-gradient(90deg,#38222e 0%,#122028 60%,#0d1a20 100%);}
   html.js-h .ps-grad span:nth-child(5){background:linear-gradient(90deg,#0d1a20 0%,#0a1414 100%);}
-  html.js-h .ps-sun{position:absolute;left:0;top:0;width:150px;z-index:1;will-change:transform;}
+  html.js-h .ps-sun{position:absolute;left:0;top:0;width:min(150px,15vh);z-index:1;will-change:transform;}
   html.js-h .ps-moon{position:absolute;left:0;top:0;width:110px;z-index:1;transform:translate(70vw,120vh);
     filter:drop-shadow(0 0 26px rgba(244,233,210,.35));will-change:transform;}
   html.js-h .ps-rail{display:block;position:absolute;left:0;right:0;bottom:0;height:58px;z-index:4;
@@ -264,6 +269,29 @@ PATA_JS = """
   (function tick(now){ if(now - last >= step){ last = now; frame(false); } requestAnimationFrame(tick); })(0);
 })();
 
+/* ===== header-band line art: hide it wherever it would touch the header's text or sun ===== */
+(function(){try{
+  var m=document.querySelector('.band-motif'); if(!m) return;
+  var band=m.parentElement;
+  function hit(a,b){ return Math.min(a.right,b.right)-Math.max(a.left,b.left)>0 && Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>0; }
+  function check(){
+    m.classList.remove('is-off');
+    var b=m.getBoundingClientRect(); if(!b.width) return;
+    var r={left:b.left-16,right:b.right+16,top:b.top-16,bottom:b.bottom+16}, off=false, n;
+    var tw=document.createTreeWalker(band,NodeFilter.SHOW_TEXT);
+    while(!off && (n=tw.nextNode())){
+      if(!n.textContent.trim() || m.contains(n)) continue;
+      var rg=document.createRange(); rg.selectNodeContents(n); var rs=rg.getClientRects();
+      for(var i=0;i<rs.length;i++){ if(hit(r,rs[i])){ off=true; break; } }
+    }
+    [].forEach.call(band.querySelectorAll('img'),function(im){ if(hit(r,im.getBoundingClientRect())) off=true; });
+    m.classList.toggle('is-off',off);
+  }
+  check(); window.addEventListener('load',check);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+  var t; window.addEventListener('resize',function(){ clearTimeout(t); t=setTimeout(check,150); });
+}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
+
 /* ===== lenis smooth scrolling ===== */
 (function(){
   if(!window.Lenis || !window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -280,8 +308,8 @@ PATA_JS = """
   if(!window.gsap){ return; } /* inline fallback timer will clear it */
   var img=l.querySelector('img'), o={r:0};
   gsap.timeline()
-    .fromTo(img,{scale:.55,rotation:-60,autoAlpha:0},{scale:1,rotation:0,autoAlpha:1,duration:.7,ease:'power3.out'})
-    .to(img,{rotation:90,scale:.9,duration:.45,ease:'power2.in'})
+    .fromTo(img,{scale:.88,autoAlpha:0},{scale:1,autoAlpha:1,duration:.6,ease:'power3.out'})
+    .to(img,{autoAlpha:0,scale:1.08,duration:.35,ease:'power2.in'},'+=.25')
     .to(o,{r:160,duration:.9,ease:'power2.inOut',onUpdate:function(){
         var m='radial-gradient(circle '+o.r+'vmax at 50% 50%, transparent '+Math.max(0,o.r-2)+'vmax, #000 '+o.r+'vmax)';
         l.style.webkitMaskImage=m; l.style.maskImage=m;
@@ -369,9 +397,12 @@ PATA_JS = """
     }});
     tl.to([track,'.ps-grad'],{x:function(){ return -dist(); }, ease:'none', duration:4},0);
     /* sun sets across the day panels, moon rises over the night ones */
-    tl.fromTo('.ps-sun',{x:'12vw',y:'8vh',rotation:0},{x:'58vw',y:'76vh',rotation:160,ease:'none',duration:2.6},0)
-      .to('.ps-sun',{autoAlpha:0,duration:.3},2.5)
-      .fromTo('.ps-moon',{x:'72vw',y:'120vh'},{x:'74vw',y:'10vh',ease:'power1.out',duration:1.1},2.7);
+    /* (kept above the text band, then sets on the right while no text is passing there) */
+    tl.fromTo('.ps-sun',{x:'64vw',y:'10.5vh',rotation:0},{x:'84vw',y:'11vh',rotation:90,ease:'none',duration:1.76},0)
+      .to('.ps-sun',{x:'86vw',y:'80vh',rotation:140,ease:'power1.in',duration:.24},1.76)
+      .to('.ps-sun',{y:'108vh',rotation:160,ease:'none',duration:.22},2.0)
+      .to('.ps-sun',{autoAlpha:0,duration:.15},2.2)
+      .fromTo('.ps-moon',{x:'76vw',y:'120vh'},{x:'78vw',y:'10vh',ease:'power1.out',duration:1.1},2.7);
     /* ticker drifts against the direction of travel */
     tl.fromTo('.ps-tick',{xPercent:0},{xPercent:-50,ease:'none',duration:4},0);
     /* kinetic type: layers slide at their own speeds */
@@ -380,7 +411,7 @@ PATA_JS = """
       var panel=el.closest('.ps-panel');
       var i=gsap.utils.toArray(ps.querySelectorAll('.ps-panel')).indexOf(panel);
       var start=Math.max(0,i-1), dur=Math.min(2,4-start);
-      var d=90*(sp-1)+40*sp;
+      var d=(90*(sp-1)+40*sp)*Math.min(1,window.innerWidth/1440);
       tl.fromTo(el,{x:d},{x:-d,ease:'none',duration:dur},start);
     });
     /* motifs paint themselves in as their panel arrives */
@@ -389,7 +420,25 @@ PATA_JS = """
       tl.to(el.querySelectorAll('path,circle,ellipse'),
         {strokeDashoffset:0, duration:c[2]-c[1], stagger:.08, ease:'none'}, c[1]);
     });
-    return function(){ document.documentElement.classList.remove('js-h'); };
+    /* line art steps aside whenever sliding text reaches it, so it never sits behind words */
+    var arts=[].slice.call(ps.querySelectorAll('.ps-art'));
+    function artGuard(){
+      var W=window.innerWidth;
+      arts.forEach(function(a){
+        var s=a.querySelector('svg'); if(!s) return;
+        var r=s.getBoundingClientRect(); if(r.right<0||r.left>W) return;
+        r={left:r.left-14,right:r.right+14,top:r.top-14,bottom:r.bottom+14};
+        var hit=false;
+        [].forEach.call(a.closest('.ps-panel').querySelectorAll('.ps-eyeb,.kin,.ps-copy'),function(t){
+          if(hit) return; var rg=document.createRange(); rg.selectNodeContents(t); var rs=rg.getClientRects();
+          for(var i=0;i<rs.length;i++){ var q=rs[i];
+            if(Math.min(r.right,q.right)-Math.max(r.left,q.left)>0 && Math.min(r.bottom,q.bottom)-Math.max(r.top,q.top)>0){ hit=true; break; } }
+        });
+        a.classList.toggle('is-off',hit);
+      });
+    }
+    tl.eventCallback('onUpdate',artGuard); artGuard();
+    return function(){ document.documentElement.classList.remove('js-h'); arts.forEach(function(a){ a.classList.remove('is-off'); }); };
   });
 
   mm.add('(max-width:899px), (prefers-reduced-motion: reduce)', function(){
@@ -434,8 +483,9 @@ PAGE_CSS = """
 #ptc-main .band h1{font-size:clamp(50px,7.2vw,108px);line-height:1.02;letter-spacing:-.015em;}
 #ptc-main .band h1 em{color:transparent;-webkit-text-stroke:1.8px #241e16;}
 /* painted band motif */
-.band-motif{position:absolute;left:4vw;bottom:-14px;z-index:1;opacity:.45;color:#241e16;pointer-events:none;}
-.band-motif .dr{width:min(20vw,220px);height:auto;}
+.band-motif{position:absolute;right:7vw;left:auto;bottom:-14px;z-index:0;opacity:.45;color:#241e16;pointer-events:none;}
+.band-motif.is-off{display:none;}
+.band-motif .dr{display:block;height:200px;width:auto;max-width:200px;}
 @media (max-width:700px){.band-motif{display:none;}#ptc-main .band h1{font-size:38px;}}
 /* nav over daylight bands */
 .ptc-nav .nlogo .lg-d{display:none!important;}

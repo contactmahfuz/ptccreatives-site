@@ -20,26 +20,34 @@ IMGS = {"sun": "sun.webp", "figure": "figure.webp", "ribbon": "ribbon_embed.webp
 for k, f in IMGS.items():
     shutil.copy(f"layers/{f}", f"{OUT}/img/{k}.webp")
 shutil.copy("/mnt/user-data/uploads/bcad9c23-image.jpg", f"{OUT}/img/og.jpg")
-# ---------- favicon: PTC wordmark on a cream pata-paper tile ----------
-def _make_icon(size, out):
-    tile = Image.new("RGBA", (size, size), (244, 233, 210, 255))
-    mark = Image.open("iconsrc/site-icon.png").convert("RGBA")
-    mw = round(size * 0.82)
-    mh = round(mark.height * mw / mark.width)
-    mark = mark.resize((mw, mh), Image.LANCZOS)
-    tile.paste(mark, ((size - mw) // 2, (size - mh) // 2), mark)
-    # softly rounded corners
-    from PIL import ImageDraw
-    m = Image.new("L", (size, size), 0)
-    ImageDraw.Draw(m).rounded_rectangle([0, 0, size, size], radius=size // 6, fill=255)
-    tile.putalpha(m)
-    tile.save(f"{OUT}/img/{out}")
-if os.path.exists("iconsrc/site-icon.png"):
-    _make_icon(192, "favicon.png")
-    _make_icon(180, "apple-touch.png")
-else:
-    sun = Image.open("layers/sun.png")
-    sun.resize((64, round(sun.height*64/sun.width)), Image.LANCZOS).save(f"{OUT}/img/favicon.png")
+# ---------- favicon set: PTC wordmark on a full-bleed cream tile ----------
+# Square, multiples of 48px, no transparent corners, wordmark kept inside the
+# circle Google crops search-result icons to. Source lives in src/iconsrc/.
+import json as _json
+_ICON_SRC = next(p for p in ("iconsrc/site-icon.png", os.path.join(os.path.dirname(os.path.abspath(__file__)), "iconsrc/site-icon.png")) if os.path.exists(p))
+def _make_icon(size, scale=0.74):
+    src = Image.open(_ICON_SRC).convert("RGBA"); src = src.crop(src.getbbox())
+    big = size * 4
+    tile = Image.new("RGBA", (big, big), (244, 233, 210, 255))
+    mw = round(big * scale); mh = round(src.height * mw / src.width)
+    mark = src.resize((mw, mh), Image.LANCZOS)
+    tile.paste(mark, ((big - mw) // 2, (big - mh) // 2), mark)
+    return tile.resize((size, size), Image.LANCZOS).convert("RGB")
+for _s in (48, 96, 192, 512):
+    _make_icon(_s).save(f"{OUT}/img/icon-{_s}.png", optimize=True)
+_make_icon(192).save(f"{OUT}/img/favicon.png", optimize=True)
+_make_icon(180, .70).save(f"{OUT}/img/apple-touch.png", optimize=True)
+_make_icon(256).save(f"{OUT}/favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
+# preloader mark: the same wordmark in pata cream, for the dark loading screen
+_m = Image.open(_ICON_SRC).convert("RGBA"); _m = _m.crop(_m.getbbox())
+_m = _m.resize((720, round(_m.height * 720 / _m.width)), Image.LANCZOS)
+_mc = Image.new("RGBA", _m.size, (244, 233, 210, 0)); _mc.putalpha(_m.getchannel("A"))
+_mc.save(f"{OUT}/img/mark-cream.webp", quality=92, method=6)
+_json.dump({"name": "PTC Creatives", "short_name": "PTC", "start_url": "/", "display": "browser",
+            "background_color": "#101f1f", "theme_color": "#101f1f",
+            "icons": [{"src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png"},
+                      {"src": "/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]},
+           open(f"{OUT}/site.webmanifest", "w"), indent=1)
 
 # ---------- team photos: center-crop to 2:3, uniform size ----------
 os.makedirs(f"{OUT}/img/team", exist_ok=True)
@@ -388,11 +396,6 @@ body{margin:0;background:#101f1f;}
 @keyframes sunspin{to{transform:rotate(360deg)}}
 @media (max-width:700px){.band-sun{width:80px;top:96px;right:24px;opacity:.5;}}
 @media (prefers-reduced-motion:reduce){.band-sun{animation:none;}}
-/* ===== homepage travelers: hero elements journey down the page ===== */
-#trav-fish{position:fixed;bottom:7vh;left:-280px;z-index:3;opacity:0;pointer-events:none;display:flex;gap:26px;align-items:center;will-change:transform;}
-#trav-fish img{width:112px;}
-#trav-fish img:last-child{width:86px;margin-top:30px;}
-@media (max-width:900px){#trav-fish{display:none!important;}}
 """
 
 # ---------- new shared js ----------
@@ -444,23 +447,6 @@ EXTRA_JS = """
     fr.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();play();}});
   });
 })();
-/* homepage travelers: the hero's sun and fish journey through the sections */
-(function(){
-  if(!window.gsap) return;
-  var tf=document.getElementById('trav-fish');
-  if(!tf) return;
-  if(!window.matchMedia('(min-width:901px)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  gsap.registerPlugin(ScrollTrigger);
-  var tl=gsap.timeline({scrollTrigger:{trigger:'#services',start:'top 75%',end:'bottom bottom',endTrigger:'#ptc-main',scrub:1.2,invalidateOnRefresh:true}});
-  /* fish swim across the bottom, then back the other way */
-  tl.to(tf,{opacity:.55,duration:.03},.15)
-    .to(tf,{x:function(){return window.innerWidth+340;},duration:.26,ease:'none'},.16)
-    .set(tf,{scaleX:-1,y:-50},.46)
-    .to(tf,{opacity:.5,duration:.02},.52)
-    .to(tf,{x:0,duration:.26,ease:'none'},.53)
-    .to(tf,{opacity:0,duration:.05},.82);
-})();
 """
 
 # ---------- shared partials ----------
@@ -491,7 +477,7 @@ JSONLD = """<script type="application/ld+json">
  "slogan":"Inspiring Creative Brilliance",
  "description":"Creative production agency in Dhaka, Bangladesh: video production, documentaries, podcasts, design, events, PR and digital campaigns.",
  "url":"https://ptccreatives.com/",
- "logo":"https://ptccreatives.com/img/favicon.png",
+ "logo":"https://ptccreatives.com/img/icon-512.png",
  "image":"https://ptccreatives.com/img/og.jpg",
  "email":"contact@ptccreatives.com",
  "telephone":"+8801762206983",
@@ -538,13 +524,16 @@ def head(title, desc, fname="index.html", p=""):
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{SITE}/img/og.jpg">
 {ld}
-<link rel="icon" type="image/png" href="{p}img/favicon.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/img/icon-96.png">
+<link rel="manifest" href="/site.webmanifest">
 <script>var __pp=location.pathname,__pq=__pp.slice(-11)==='/index.html'?__pp.slice(0,-10):__pp.slice(-5)==='.html'?__pp.slice(0,-5):__pp;if(__pq!==__pp)history.replaceState(null,'',__pq+location.search+location.hash);</script>
-<link rel="apple-touch-icon" href="{p}img/apple-touch.png">
+<link rel="apple-touch-icon" href="/img/apple-touch.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{p}css/tw.css">
-<link rel="stylesheet" href="{p}css/site.css?v=20261118a">
+<link rel="stylesheet" href="{p}css/site.css?v=20261118b">
 </head>
 <body>
 """ + PRELUDE_HTML.replace('src="img/', f'src="{p}img/')
@@ -601,7 +590,7 @@ def footer(p=""):
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="{p}js/main.js?v=20261118a"></script>
+<script src="{p}js/main.js?v=20261118b"></script>
 </body>
 </html>
 """
@@ -612,7 +601,6 @@ def footer(p=""):
 BAND_SUN = '<img class="band-sun" src="img/sun.webp" alt="" aria-hidden="true">'
 
 TRAVELERS = """
-  <div id="trav-fish" aria-hidden="true"><img src="img/fish1.webp" alt=""><img src="img/fish2.webp" alt=""></div>
 """
 # homepage: About strip + Process move into the unrolling-scroll chapter (About page keeps its own copies)
 sect_home = sect_body.replace(SEC_PROCESS_RAW, "")  # "How We Work" lives in the scroll chapter now

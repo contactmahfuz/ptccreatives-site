@@ -124,23 +124,6 @@
     fr.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();play();}});
   });
 }catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
-/* homepage travelers: the hero's sun and fish journey through the sections */
-(function(){try{
-  if(!window.gsap) return;
-  var tf=document.getElementById('trav-fish');
-  if(!tf) return;
-  if(!window.matchMedia('(min-width:901px)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  gsap.registerPlugin(ScrollTrigger);
-  var tl=gsap.timeline({scrollTrigger:{trigger:'#services',start:'top 75%',end:'bottom bottom',endTrigger:'#ptc-main',scrub:1.2,invalidateOnRefresh:true}});
-  /* fish swim across the bottom, then back the other way */
-  tl.to(tf,{opacity:.55,duration:.03},.15)
-    .to(tf,{x:function(){return window.innerWidth+340;},duration:.26,ease:'none'},.16)
-    .set(tf,{scaleX:-1,y:-50},.46)
-    .to(tf,{opacity:.5,duration:.02},.52)
-    .to(tf,{x:0,duration:.26,ease:'none'},.53)
-    .to(tf,{opacity:0,duration:.05},.82);
-}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
 
 
 /* ===== film grain: animated noise that lives on the backgrounds, under all content ===== */
@@ -190,6 +173,29 @@
   (function tick(now){ if(now - last >= step){ last = now; frame(false); } requestAnimationFrame(tick); })(0);
 }catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
 
+/* ===== header-band line art: hide it wherever it would touch the header's text or sun ===== */
+(function(){try{
+  var m=document.querySelector('.band-motif'); if(!m) return;
+  var band=m.parentElement;
+  function hit(a,b){ return Math.min(a.right,b.right)-Math.max(a.left,b.left)>0 && Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>0; }
+  function check(){
+    m.classList.remove('is-off');
+    var b=m.getBoundingClientRect(); if(!b.width) return;
+    var r={left:b.left-16,right:b.right+16,top:b.top-16,bottom:b.bottom+16}, off=false, n;
+    var tw=document.createTreeWalker(band,NodeFilter.SHOW_TEXT);
+    while(!off && (n=tw.nextNode())){
+      if(!n.textContent.trim() || m.contains(n)) continue;
+      var rg=document.createRange(); rg.selectNodeContents(n); var rs=rg.getClientRects();
+      for(var i=0;i<rs.length;i++){ if(hit(r,rs[i])){ off=true; break; } }
+    }
+    [].forEach.call(band.querySelectorAll('img'),function(im){ if(hit(r,im.getBoundingClientRect())) off=true; });
+    m.classList.toggle('is-off',off);
+  }
+  check(); window.addEventListener('load',check);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+  var t; window.addEventListener('resize',function(){ clearTimeout(t); t=setTimeout(check,150); });
+}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
+
 /* ===== lenis smooth scrolling ===== */
 (function(){try{
   if(!window.Lenis || !window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -206,8 +212,8 @@
   if(!window.gsap){ return; } /* inline fallback timer will clear it */
   var img=l.querySelector('img'), o={r:0};
   gsap.timeline()
-    .fromTo(img,{scale:.55,rotation:-60,autoAlpha:0},{scale:1,rotation:0,autoAlpha:1,duration:.7,ease:'power3.out'})
-    .to(img,{rotation:90,scale:.9,duration:.45,ease:'power2.in'})
+    .fromTo(img,{scale:.88,autoAlpha:0},{scale:1,autoAlpha:1,duration:.6,ease:'power3.out'})
+    .to(img,{autoAlpha:0,scale:1.08,duration:.35,ease:'power2.in'},'+=.25')
     .to(o,{r:160,duration:.9,ease:'power2.inOut',onUpdate:function(){
         var m='radial-gradient(circle '+o.r+'vmax at 50% 50%, transparent '+Math.max(0,o.r-2)+'vmax, #000 '+o.r+'vmax)';
         l.style.webkitMaskImage=m; l.style.maskImage=m;
@@ -295,9 +301,12 @@
     }});
     tl.to([track,'.ps-grad'],{x:function(){ return -dist(); }, ease:'none', duration:4},0);
     /* sun sets across the day panels, moon rises over the night ones */
-    tl.fromTo('.ps-sun',{x:'12vw',y:'8vh',rotation:0},{x:'58vw',y:'76vh',rotation:160,ease:'none',duration:2.6},0)
-      .to('.ps-sun',{autoAlpha:0,duration:.3},2.5)
-      .fromTo('.ps-moon',{x:'72vw',y:'120vh'},{x:'74vw',y:'10vh',ease:'power1.out',duration:1.1},2.7);
+    /* (kept above the text band, then sets on the right while no text is passing there) */
+    tl.fromTo('.ps-sun',{x:'64vw',y:'10.5vh',rotation:0},{x:'84vw',y:'11vh',rotation:90,ease:'none',duration:1.76},0)
+      .to('.ps-sun',{x:'86vw',y:'80vh',rotation:140,ease:'power1.in',duration:.24},1.76)
+      .to('.ps-sun',{y:'108vh',rotation:160,ease:'none',duration:.22},2.0)
+      .to('.ps-sun',{autoAlpha:0,duration:.15},2.2)
+      .fromTo('.ps-moon',{x:'76vw',y:'120vh'},{x:'78vw',y:'10vh',ease:'power1.out',duration:1.1},2.7);
     /* ticker drifts against the direction of travel */
     tl.fromTo('.ps-tick',{xPercent:0},{xPercent:-50,ease:'none',duration:4},0);
     /* kinetic type: layers slide at their own speeds */
@@ -306,7 +315,7 @@
       var panel=el.closest('.ps-panel');
       var i=gsap.utils.toArray(ps.querySelectorAll('.ps-panel')).indexOf(panel);
       var start=Math.max(0,i-1), dur=Math.min(2,4-start);
-      var d=90*(sp-1)+40*sp;
+      var d=(90*(sp-1)+40*sp)*Math.min(1,window.innerWidth/1440);
       tl.fromTo(el,{x:d},{x:-d,ease:'none',duration:dur},start);
     });
     /* motifs paint themselves in as their panel arrives */
@@ -315,7 +324,25 @@
       tl.to(el.querySelectorAll('path,circle,ellipse'),
         {strokeDashoffset:0, duration:c[2]-c[1], stagger:.08, ease:'none'}, c[1]);
     });
-    return function(){ document.documentElement.classList.remove('js-h'); };
+    /* line art steps aside whenever sliding text reaches it, so it never sits behind words */
+    var arts=[].slice.call(ps.querySelectorAll('.ps-art'));
+    function artGuard(){
+      var W=window.innerWidth;
+      arts.forEach(function(a){
+        var s=a.querySelector('svg'); if(!s) return;
+        var r=s.getBoundingClientRect(); if(r.right<0||r.left>W) return;
+        r={left:r.left-14,right:r.right+14,top:r.top-14,bottom:r.bottom+14};
+        var hit=false;
+        [].forEach.call(a.closest('.ps-panel').querySelectorAll('.ps-eyeb,.kin,.ps-copy'),function(t){
+          if(hit) return; var rg=document.createRange(); rg.selectNodeContents(t); var rs=rg.getClientRects();
+          for(var i=0;i<rs.length;i++){ var q=rs[i];
+            if(Math.min(r.right,q.right)-Math.max(r.left,q.left)>0 && Math.min(r.bottom,q.bottom)-Math.max(r.top,q.top)>0){ hit=true; break; } }
+        });
+        a.classList.toggle('is-off',hit);
+      });
+    }
+    tl.eventCallback('onUpdate',artGuard); artGuard();
+    return function(){ document.documentElement.classList.remove('js-h'); arts.forEach(function(a){ a.classList.remove('is-off'); }); };
   });
 
   mm.add('(max-width:899px), (prefers-reduced-motion: reduce)', function(){
@@ -344,30 +371,6 @@
 }catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
 
 
-/* services index list: floating motif preview chases the cursor */
-(function(){try{
-  if(!window.gsap) return;
-  if(!window.matchMedia('(pointer: fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var fl=document.querySelector('.ix-float');
-  var ix=document.querySelector('#services .ix');
-  if(!fl||!ix) return;
-  var img=fl.querySelector('img');
-  var qx=gsap.quickTo(fl,'x',{duration:.45,ease:'power3'}), qy=gsap.quickTo(fl,'y',{duration:.45,ease:'power3'});
-  var qr=gsap.quickTo(fl,'rotation',{duration:.6,ease:'power2'});
-  var lastX=0;
-  ix.addEventListener('mousemove',function(e){
-    qx(e.clientX+28); qy(e.clientY-70); qr(gsap.utils.clamp(-14,14,(e.clientX-lastX)*.8)); lastX=e.clientX;
-  });
-  ix.querySelectorAll('.ix-row').forEach(function(row){
-    row.addEventListener('mouseenter',function(){
-      var s=row.getAttribute('data-img');
-      if(s && img.getAttribute('src')!==s) img.setAttribute('src',s);
-      gsap.to(fl,{opacity:1,scale:1,duration:.3,overwrite:'auto'});
-    });
-  });
-  ix.addEventListener('mouseleave',function(){ gsap.to(fl,{opacity:0,scale:.8,duration:.25,overwrite:'auto'}); });
-}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
 /* featured film: cinema expand on scroll */
 (function(){try{
   if(!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;

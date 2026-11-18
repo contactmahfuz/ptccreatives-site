@@ -279,11 +279,6 @@ body{margin:0;background:#101f1f;}
 @keyframes sunspin{to{transform:rotate(360deg)}}
 @media (max-width:700px){.band-sun{width:80px;top:96px;right:24px;opacity:.5;}}
 @media (prefers-reduced-motion:reduce){.band-sun{animation:none;}}
-/* ===== homepage travelers: hero elements journey down the page ===== */
-#trav-fish{position:fixed;bottom:7vh;left:-280px;z-index:3;opacity:0;pointer-events:none;display:flex;gap:26px;align-items:center;will-change:transform;}
-#trav-fish img{width:112px;}
-#trav-fish img:last-child{width:86px;margin-top:30px;}
-@media (max-width:900px){#trav-fish{display:none!important;}}
 
 
 /* ============ film grain (lives on the backgrounds, under all content) + vignette ============ */
@@ -301,7 +296,7 @@ html.js-h .ps-panel>.gr,html.js-h #cs .cs-panel>.gr{display:none;}
 
 /* ============ iris preloader ============ */
 #ldr{position:fixed;inset:0;z-index:999;background:#0a1414;display:flex;align-items:center;justify-content:center;}
-#ldr img{width:150px;height:auto;opacity:.95;}
+#ldr img{width:clamp(110px,14vw,170px);height:auto;opacity:0;}
 
 /* ============ custom cursor ============ */
 #curd,#curr{position:fixed;left:0;top:0;z-index:400;pointer-events:none;border-radius:50%;display:none;mix-blend-mode:difference;}
@@ -318,7 +313,8 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 .ps-panel{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;padding:80px 7vw;}
 .ps-inner{position:relative;z-index:3;max-width:1100px;}
 .ps-center{text-align:center;margin:0 auto;}
-.ps-eyeb{font-size:13px;font-weight:400;letter-spacing:.42em;text-transform:uppercase;color:#179c97;margin:0 0 22px;}
+.ps-eyeb{display:inline-flex;align-items:center;gap:12px;font-size:13px;font-weight:500;letter-spacing:.42em;line-height:1;text-transform:uppercase;color:#f4e9d2;background:rgba(36,30,22,.9);padding:9px 10px 9px 14px;margin:0 0 22px;box-shadow:inset 0 0 0 1px rgba(244,233,210,.14);}
+.ps-eyeb::before{content:'';width:6px;height:6px;flex:0 0 6px;background:#e8a317;transform:rotate(45deg);}
 .kin{font-family:'Poppins',sans-serif;font-weight:600;line-height:.95;letter-spacing:-.015em;margin:0 0 10px;font-size:clamp(64px,11vw,176px);white-space:nowrap;}
 .kin-o{color:transparent!important;-webkit-text-stroke:1.5px #f4e9d2;}
 .ps-ink .kin-o{-webkit-text-stroke-color:#241e16;}
@@ -327,7 +323,6 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 .kin-big{font-size:clamp(56px,9vw,152px);white-space:normal;line-height:1.02;}
 .ps-copy{font-weight:300;font-size:clamp(17px,1.5vw,23px);line-height:1.8;margin:28px 0 0;opacity:.92;}
 .ps-ink{color:#241e16;}
-.ps-ink .ps-eyeb{color:#a8431f;}
 .ps-cream{color:#f4e9d2;}
 .ps-art{position:absolute;right:8vw;top:50%;transform:translateY(-50%);z-index:2;opacity:.9;}
 .dr{width:min(24vw,300px);height:auto;}
@@ -352,6 +347,11 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
   html.js-h .ps-panel{width:100vw;height:100vh;min-height:0;flex:0 0 auto;padding:0 7vw;}
   /* sky holds the gradient strip + sun; the track rides above it so text is never covered */
   html.js-h .ps-panel{background:transparent;}
+html.js-h .kin-s{font-size:clamp(22px,2.6vw,46px);}
+html.js-h .ps-art{right:4vw;}
+html.js-h .ps-art .dr{width:min(17vw,250px);}
+html.js-h .ps-art{transition:opacity .35s;}
+html.js-h .ps-art.is-off{opacity:0;}
   html.js-h .ps-track{position:relative;z-index:2;}
   html.js-h .ps-sky{display:block;position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
   html.js-h .ps-grad{position:absolute;top:0;left:0;height:100%;width:500vw;display:flex;z-index:0;will-change:transform;}
@@ -361,7 +361,7 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
   html.js-h .ps-grad span:nth-child(3){background:linear-gradient(90deg,#c0693a 0%,#7e3528 55%,#38222e 100%);}
   html.js-h .ps-grad span:nth-child(4){background:linear-gradient(90deg,#38222e 0%,#122028 60%,#0d1a20 100%);}
   html.js-h .ps-grad span:nth-child(5){background:linear-gradient(90deg,#0d1a20 0%,#0a1414 100%);}
-  html.js-h .ps-sun{position:absolute;left:0;top:0;width:150px;z-index:1;will-change:transform;}
+  html.js-h .ps-sun{position:absolute;left:0;top:0;width:min(150px,15vh);z-index:1;will-change:transform;}
   html.js-h .ps-moon{position:absolute;left:0;top:0;width:110px;z-index:1;transform:translate(70vw,120vh);
     filter:drop-shadow(0 0 26px rgba(244,233,210,.35));will-change:transform;}
   html.js-h .ps-rail{display:block;position:absolute;left:0;right:0;bottom:0;height:58px;z-index:4;
@@ -403,8 +403,9 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 #ptc-main .band h1{font-size:clamp(50px,7.2vw,108px);line-height:1.02;letter-spacing:-.015em;}
 #ptc-main .band h1 em{color:transparent;-webkit-text-stroke:1.8px #241e16;}
 /* painted band motif */
-.band-motif{position:absolute;left:4vw;bottom:-14px;z-index:1;opacity:.45;color:#241e16;pointer-events:none;}
-.band-motif .dr{width:min(20vw,220px);height:auto;}
+.band-motif{position:absolute;right:7vw;left:auto;bottom:-14px;z-index:0;opacity:.45;color:#241e16;pointer-events:none;}
+.band-motif.is-off{display:none;}
+.band-motif .dr{display:block;height:200px;width:auto;max-width:200px;}
 @media (max-width:700px){.band-motif{display:none;}#ptc-main .band h1{font-size:38px;}}
 /* nav over daylight bands */
 .ptc-nav .nlogo .lg-d{display:none!important;}
@@ -426,8 +427,6 @@ html.ptc-cur #curd,html.ptc-cur #curr{display:block;}
 #ptc-main .ix-row:hover{padding-left:22px;background:rgba(23,156,151,.06);}
 #ptc-main .ix-desc{font-weight:300;font-size:15px;line-height:1.6;color:rgba(255,255,255,.7);max-width:300px;text-align:right;opacity:0;transform:translateX(16px);transition:opacity .35s,transform .35s;}
 #ptc-main .ix-row:hover .ix-desc{opacity:1;transform:none;}
-.ix-float{position:fixed;left:0;top:0;z-index:120;width:150px;pointer-events:none;opacity:0;will-change:transform;}
-.ix-float img{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 32px rgba(0,0,0,.5));}
 /* narrow windows: the longest names stop fitting on one line beside the
    description, so let them wrap rather than run over it */
 @media (min-width:701px) and (max-width:1200px){#ptc-main .ix-name{white-space:normal;}}

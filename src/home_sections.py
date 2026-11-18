@@ -11,7 +11,7 @@ IX_ROWS = [
     ("06", "Web Presence",      "Websites and landing pages built to convert.",                      "img/ribbon.webp"),
     ("07", "PR &amp; Activation", "Press, partnerships and live activations that get you noticed.",    "img/figure.webp"),
 ]
-_rows = "".join(f"""      <a class="ix-row ptc-reveal" href="services.html" data-img="{img}">
+_rows = "".join(f"""      <a class="ix-row ptc-reveal" href="services.html">
         <span class="ix-num">{num}</span>
         <span class="ix-name">{name}</span>
         <span class="ix-desc">{desc}</span>
@@ -22,7 +22,6 @@ SEC_INDEX = f"""<section class="dots" id="services">
     <h2 class="ptc-reveal">What We <em>Do</em></h2>
     <div class="ix">
 {_rows}    </div>
-    <div class="ix-float" aria-hidden="true"><img src="img/sun.webp" alt=""></div>
   </section>"""
 
 _FF = "".join(f'<span class="ff" style="left:{l}%;top:{t}%;--d:{d}s;--dl:{dl}s;"></span>'
@@ -81,8 +80,6 @@ HOME_CSS = """
 #ptc-main .ix-row:hover{padding-left:22px;background:rgba(23,156,151,.06);}
 #ptc-main .ix-desc{font-weight:300;font-size:15px;line-height:1.6;color:rgba(255,255,255,.7);max-width:300px;text-align:right;opacity:0;transform:translateX(16px);transition:opacity .35s,transform .35s;}
 #ptc-main .ix-row:hover .ix-desc{opacity:1;transform:none;}
-.ix-float{position:fixed;left:0;top:0;z-index:120;width:150px;pointer-events:none;opacity:0;will-change:transform;}
-.ix-float img{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 32px rgba(0,0,0,.5));}
 /* narrow windows: the longest names stop fitting on one line beside the
    description, so let them wrap rather than run over it */
 @media (min-width:701px) and (max-width:1200px){#ptc-main .ix-name{white-space:normal;}}
@@ -156,30 +153,6 @@ HOME_CSS = """
 """
 
 HOME_JS = """
-/* services index list: floating motif preview chases the cursor */
-(function(){
-  if(!window.gsap) return;
-  if(!window.matchMedia('(pointer: fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var fl=document.querySelector('.ix-float');
-  var ix=document.querySelector('#services .ix');
-  if(!fl||!ix) return;
-  var img=fl.querySelector('img');
-  var qx=gsap.quickTo(fl,'x',{duration:.45,ease:'power3'}), qy=gsap.quickTo(fl,'y',{duration:.45,ease:'power3'});
-  var qr=gsap.quickTo(fl,'rotation',{duration:.6,ease:'power2'});
-  var lastX=0;
-  ix.addEventListener('mousemove',function(e){
-    qx(e.clientX+28); qy(e.clientY-70); qr(gsap.utils.clamp(-14,14,(e.clientX-lastX)*.8)); lastX=e.clientX;
-  });
-  ix.querySelectorAll('.ix-row').forEach(function(row){
-    row.addEventListener('mouseenter',function(){
-      var s=row.getAttribute('data-img');
-      if(s && img.getAttribute('src')!==s) img.setAttribute('src',s);
-      gsap.to(fl,{opacity:1,scale:1,duration:.3,overwrite:'auto'});
-    });
-  });
-  ix.addEventListener('mouseleave',function(){ gsap.to(fl,{opacity:0,scale:.8,duration:.25,overwrite:'auto'}); });
-})();
 /* featured film: cinema expand on scroll */
 (function(){
   if(!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
