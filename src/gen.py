@@ -371,6 +371,10 @@ body{margin:0;background:#101f1f;}
 #ptc-main .tm figcaption b{display:block;font-size:17px;font-weight:600;color:#fff;}
 #ptc-main .tm figcaption span{display:block;margin-top:5px;font-size:12px;font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:#179c97;}
 @media (max-width:900px){#ptc-main .tm-grid{grid-template-columns:1fr 1fr;}}
+#ptc-main .nf-links{margin-top:34px;display:flex;flex-wrap:wrap;gap:12px 26px;}
+#ptc-main .nf-links a{font-size:14px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink,#13302f);border-bottom:1px solid rgba(23,156,151,.5);padding-bottom:3px;}
+#ptc-main .nf-links a:hover{border-bottom-color:currentColor;}
 @media (max-width:600px){
   #ptc-main .tm-grid{grid-template-columns:1fr 1fr;gap:14px;}
   #ptc-main .tm figcaption{padding:14px 14px 16px;}
@@ -903,6 +907,61 @@ for _ci, _cs in enumerate(CASE_STUDIES):
     open(f"{_d}/index.html", "w").write(clean_urls(_html))
     CASE_URLS.append(f"work/{_cs['slug']}/")
     print("case:", _cs["slug"])
+
+# ---------- 404 ----------
+# GitHub Pages serves this for any unknown path. Kept out of PAGES so it never
+# reaches the sitemap, and marked noindex so Google does not try to index it.
+BODY_404 = """<div id="ptc-main">
+  <section class="band dots pg-day">
+    {BAND_SUN}
+    {BM_LOTUS}
+    <p class="ptc-eyeb ptc-reveal">404</p>
+    <h1 class="ptc-reveal">This page has <em>moved on</em></h1>
+    <p class="lead ptc-reveal">The link you followed points somewhere that no longer exists.
+    Everything is still here, just at a different address.</p>
+    <p class="ptc-reveal" style="margin-top:30px;">
+      <a class="ptc-btn" href="/">Back to Home</a>
+    </p>
+    <p class="ptc-reveal nf-links">
+      <a href="case-studies.html">Our work</a>
+      <a href="services.html">What we do</a>
+      <a href="about.html">About the studio</a>
+      <a href="contact.html">Get in touch</a>
+    </p>
+  </section>
+</div>"""
+_404 = (head("Page not found | PTC Creatives",
+             "The page you are looking for is not here. Browse our work, services and contact details instead.",
+             "404.html")
+        + nav("", day=True)
+        + detok(BODY_404.replace("{BAND_SUN}", BAND_SUN).replace("{BM_LOTUS}", BM_LOTUS))
+        + footer())
+# one robots directive only, and no canonical: this URL is not a real page
+_404 = re.sub(r'<meta name="robots" content="[^"]*">', '<meta name="robots" content="noindex, follow">', _404, count=1)
+_404 = re.sub(r'\s*<link rel="canonical"[^>]*>', '', _404, count=1)
+_404 = re.sub(r'\s*<meta property="og:url"[^>]*>', '', _404, count=1)
+open(f"{OUT}/404.html", "w").write(clean_urls(_404))
+print("404.html")
+
+# ---------- redirects for URLs from the old WordPress site ----------
+# GitHub Pages cannot issue a 301, so these are meta-refresh stubs carrying a
+# canonical to the new address. Google follows them and passes the old page's
+# standing on. Add a line here whenever Search Console reports a 404 for a URL
+# that has an equivalent on this site.
+REDIRECTS = {
+    "about-ptc": "/about",
+}
+for _old, _new in REDIRECTS.items():
+    os.makedirs(f"{OUT}/{_old}", exist_ok=True)
+    open(f"{OUT}/{_old}/index.html", "w").write(
+        '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+        f'<meta http-equiv="refresh" content="0; url={_new}">\n'
+        f'<link rel="canonical" href="{SITE}{_new}">\n'
+        '<meta name="robots" content="noindex, follow">\n'
+        '<title>Moved | PTC Creatives</title>\n</head>\n<body>\n'
+        f'<p>This page has moved to <a href="{_new}">{SITE}{_new}</a>.</p>\n'
+        f'<script>location.replace("{_new}");</script>\n</body>\n</html>\n')
+    print("redirect:", _old, "->", _new)
 
 # ---------- robots.txt + sitemap.xml ----------
 import datetime

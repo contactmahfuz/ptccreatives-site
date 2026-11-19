@@ -270,7 +270,7 @@ PATA_JS = """
 })();
 
 /* ===== header-band line art: hide it wherever it would touch the header's text or sun ===== */
-(function(){try{
+(function(){
   var m=document.querySelector('.band-motif'); if(!m) return;
   var band=m.parentElement;
   function hit(a,b){ return Math.min(a.right,b.right)-Math.max(a.left,b.left)>0 && Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>0; }
@@ -290,7 +290,7 @@ PATA_JS = """
   check(); window.addEventListener('load',check);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(check);
   var t; window.addEventListener('resize',function(){ clearTimeout(t); t=setTimeout(check,150); });
-}catch(_e){if(window.console&&console.warn)console.warn('ptc module error:',_e);}})();
+})();
 
 /* ===== lenis smooth scrolling ===== */
 (function(){
