@@ -397,12 +397,9 @@ PATA_JS = """
     }});
     tl.to([track,'.ps-grad'],{x:function(){ return -dist(); }, ease:'none', duration:4},0);
     /* sun sets across the day panels, moon rises over the night ones */
-    /* (kept above the text band, then sets on the right while no text is passing there) */
-    tl.fromTo('.ps-sun',{x:'64vw',y:'10.5vh',rotation:0},{x:'84vw',y:'11vh',rotation:90,ease:'none',duration:1.76},0)
-      .to('.ps-sun',{x:'86vw',y:'80vh',rotation:140,ease:'power1.in',duration:.24},1.76)
-      .to('.ps-sun',{y:'108vh',rotation:160,ease:'none',duration:.22},2.0)
-      .to('.ps-sun',{autoAlpha:0,duration:.15},2.2)
-      .fromTo('.ps-moon',{x:'76vw',y:'120vh'},{x:'78vw',y:'10vh',ease:'power1.out',duration:1.1},2.7);
+    tl.fromTo('.ps-sun',{x:'12vw',y:'8vh',rotation:0},{x:'58vw',y:'76vh',rotation:160,ease:'none',duration:2.6},0)
+      .to('.ps-sun',{autoAlpha:0,duration:.3},2.5)
+      .fromTo('.ps-moon',{x:'72vw',y:'120vh'},{x:'74vw',y:'10vh',ease:'power1.out',duration:1.1},2.7);
     /* ticker drifts against the direction of travel */
     tl.fromTo('.ps-tick',{xPercent:0},{xPercent:-50,ease:'none',duration:4},0);
     /* kinetic type: layers slide at their own speeds */
